@@ -23,7 +23,7 @@
     "fluent-ffmpeg-7": "^2.1.5",
     "framer-motion": "^11.18.2",
     "lucide-react": "^0.469.0",
-    "next": "^15.5.0",
+    "next": "15.5.9",
     "next-themes": "^0.4.6",
     "node-calibre": "^2.1.1",
     "pdf-lib": "^1.17.1",
