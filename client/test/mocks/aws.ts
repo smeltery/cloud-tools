@@ -23,58 +23,64 @@ export const mockSQSClient = {
   send: mockSQSSend,
 };
 
-// Create mock command constructors
-export const mockPutObjectCommand = vi.fn((params) => ({
-  ...params,
-  __type: "PutObjectCommand",
-}));
-export const mockGetObjectCommand = vi.fn((params) => ({
-  ...params,
-  __type: "GetObjectCommand",
-}));
-export const mockPutCommand = vi.fn((params) => ({
-  ...params,
-  __type: "PutCommand",
-}));
-export const mockGetCommand = vi.fn((params) => ({
-  ...params,
-  __type: "GetCommand",
-}));
-export const mockScanCommand = vi.fn((params) => ({
-  ...params,
-  __type: "ScanCommand",
-}));
-export const mockUpdateCommand = vi.fn((params) => ({
-  ...params,
-  __type: "UpdateCommand",
-}));
-export const mockSendMessageCommand = vi.fn((params) => ({
-  ...params,
-  __type: "SendMessageCommand",
-}));
-export const mockReceiveMessageCommand = vi.fn((params) => ({
-  ...params,
-  __type: "ReceiveMessageCommand",
-}));
-export const mockDeleteMessageCommand = vi.fn((params) => ({
-  ...params,
-  __type: "DeleteMessageCommand",
-}));
-export const mockGetQueueUrlCommand = vi.fn((params) => ({
-  ...params,
-  __type: "GetQueueUrlCommand",
-}));
+// Create mock command constructors that work with 'new' keyword
+export const mockPutObjectCommand = vi.fn(function (this: any, params: any) {
+  Object.assign(this, params, { __type: "PutObjectCommand" });
+});
+export const mockGetObjectCommand = vi.fn(function (this: any, params: any) {
+  Object.assign(this, params, { __type: "GetObjectCommand" });
+});
+export const mockPutCommand = vi.fn(function (this: any, params: any) {
+  Object.assign(this, params, { __type: "PutCommand" });
+});
+export const mockGetCommand = vi.fn(function (this: any, params: any) {
+  Object.assign(this, params, { __type: "GetCommand" });
+});
+export const mockScanCommand = vi.fn(function (this: any, params: any) {
+  Object.assign(this, params, { __type: "ScanCommand" });
+});
+export const mockUpdateCommand = vi.fn(function (this: any, params: any) {
+  Object.assign(this, params, { __type: "UpdateCommand" });
+});
+export const mockSendMessageCommand = vi.fn(function (this: any, params: any) {
+  Object.assign(this, params, { __type: "SendMessageCommand" });
+});
+export const mockReceiveMessageCommand = vi.fn(function (
+  this: any,
+  params: any,
+) {
+  Object.assign(this, params, { __type: "ReceiveMessageCommand" });
+});
+export const mockDeleteMessageCommand = vi.fn(function (
+  this: any,
+  params: any,
+) {
+  Object.assign(this, params, { __type: "DeleteMessageCommand" });
+});
+export const mockGetQueueUrlCommand = vi.fn(function (this: any, params: any) {
+  Object.assign(this, params, { __type: "GetQueueUrlCommand" });
+});
 
-// Mock AWS SDK modules
-vi.mock("@aws-sdk/client-s3", () => ({
-  S3Client: vi.fn(() => mockS3Client),
-  PutObjectCommand: mockPutObjectCommand,
-  GetObjectCommand: mockGetObjectCommand,
-}));
+// Mock AWS SDK modules with proper constructor functions
+vi.mock("@aws-sdk/client-s3", () => {
+  const MockS3Client = vi.fn(function (this: any) {
+    return mockS3Client;
+  });
+  return {
+    S3Client: MockS3Client,
+    PutObjectCommand: mockPutObjectCommand,
+    GetObjectCommand: mockGetObjectCommand,
+  };
+});
 
-vi.mock("@aws-sdk/client-dynamodb", () => ({
-  DynamoDBClient: vi.fn(() => mockDynamoClient),
-}));
+vi.mock("@aws-sdk/client-dynamodb", () => {
+  const MockDynamoDBClient = vi.fn(function (this: any) {
+    return mockDynamoClient;
+  });
+  return {
+    DynamoDBClient: MockDynamoDBClient,
+  };
+});
 
 vi.mock("@aws-sdk/lib-dynamodb", () => ({
   DynamoDBDocumentClient: {
@@ -86,13 +92,18 @@ vi.mock("@aws-sdk/lib-dynamodb", () => ({
   UpdateCommand: mockUpdateCommand,
 }));
 
-vi.mock("@aws-sdk/client-sqs", () => ({
-  SQSClient: vi.fn(() => mockSQSClient),
-  SendMessageCommand: mockSendMessageCommand,
-  ReceiveMessageCommand: mockReceiveMessageCommand,
-  DeleteMessageCommand: mockDeleteMessageCommand,
-  GetQueueUrlCommand: mockGetQueueUrlCommand,
-}));
+vi.mock("@aws-sdk/client-sqs", () => {
+  const MockSQSClient = vi.fn(function (this: any) {
+    return mockSQSClient;
+  });
+  return {
+    SQSClient: MockSQSClient,
+    SendMessageCommand: mockSendMessageCommand,
+    ReceiveMessageCommand: mockReceiveMessageCommand,
+    DeleteMessageCommand: mockDeleteMessageCommand,
+    GetQueueUrlCommand: mockGetQueueUrlCommand,
+  };
+});
 
 // Mock the aws-config module to use our mocked clients
 vi.mock("@/root-lib/aws-config", async () => {

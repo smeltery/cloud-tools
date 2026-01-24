@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [master]
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
 jobs:
   coverage:
     name: Coverage Report
@@ -83,11 +88,13 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           file: ./client/coverage/lcov.info
           flags: unittests
           name: codecov-coverage
           fail_ci_if_error: false
           verbose: true
+        continue-on-error: true
 
       - name: Upload coverage to Coveralls
         uses: coverallsapp/github-action@v2
@@ -143,7 +150,8 @@ jobs:
 
       - name: Store PR coverage
         run: |
-          cp client/coverage/coverage-summary.json coverage-pr.json
+          mkdir -p /tmp/coverage
+          cp client/coverage/coverage-summary.json /tmp/coverage/coverage-pr.json
 
       - name: Checkout base branch
         uses: actions/checkout@v4
@@ -167,10 +175,10 @@ jobs:
           BASE_LINE=$(node -p "JSON.parse(require('fs').readFileSync('./client/coverage/coverage-summary.json', 'utf8')).total.lines.pct")
 
           # Get coverage from PR branch
-          PR_STMT=$(node -p "JSON.parse(require('fs').readFileSync('./coverage-pr.json', 'utf8')).total.statements.pct")
-          PR_BRANCH=$(node -p "JSON.parse(require('fs').readFileSync('./coverage-pr.json', 'utf8')).total.branches.pct")
-          PR_FUNC=$(node -p "JSON.parse(require('fs').readFileSync('./coverage-pr.json', 'utf8')).total.functions.pct")
-          PR_LINE=$(node -p "JSON.parse(require('fs').readFileSync('./coverage-pr.json', 'utf8')).total.lines.pct")
+          PR_STMT=$(node -p "JSON.parse(require('fs').readFileSync('/tmp/coverage/coverage-pr.json', 'utf8')).total.statements.pct")
+          PR_BRANCH=$(node -p "JSON.parse(require('fs').readFileSync('/tmp/coverage/coverage-pr.json', 'utf8')).total.branches.pct")
+          PR_FUNC=$(node -p "JSON.parse(require('fs').readFileSync('/tmp/coverage/coverage-pr.json', 'utf8')).total.functions.pct")
+          PR_LINE=$(node -p "JSON.parse(require('fs').readFileSync('/tmp/coverage/coverage-pr.json', 'utf8')).total.lines.pct")
 
           echo "## 📊 Coverage Comparison" >> coverage-comment.md
           echo "" >> coverage-comment.md
