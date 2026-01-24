@@ -357,32 +357,6 @@ _Costs are estimates based on moderate usage. Actual costs depend on your specif
 - **⚙️ [Worker Setup](WORKER_SETUP.md)**: Your existing worker documentation
 - **🎭 [ACT Usage](ACT_USAGE.md)**: Your existing GitHub Actions local testing
 
-## 🤝 Contributing to Infrastructure
-
-1. **Follow IaC best practices**: Document changes, test in dev first
-2. **Use consistent naming**: Follow the established resource naming pattern
-3. **Security first**: Always consider security implications of changes
-4. **Cost awareness**: Consider cost impact of new resources
-5. **Test thoroughly**: Validate in dev before promoting to production
-
-## 🆙 Migration from LocalStack
-
-Your existing LocalStack development setup remains unchanged! The Terraform infrastructure provides:
-
-- **Development**: Use LocalStack for local development (as you do now)
-- **Testing**: Deploy to AWS dev environment for integration testing
-- **Production**: Deploy to AWS production environment for live traffic
-
-## 🎉 What's Next?
-
-With your infrastructure now codified and deployable:
-
-1. **🚀 Deploy to AWS**: Get your app running in the cloud
-2. **🔄 Set up CI/CD**: Automate deployments with GitHub Actions
-3. **📊 Monitor Performance**: Use the CloudWatch dashboards
-4. **💰 Optimize Costs**: Review cost reports and optimize as needed
-5. **🔒 Enhance Security**: Add additional security layers as needed
-
 ---
 
 **🎯 Ready to deploy your infrastructure?** Head over to the [terraform/README.md](../terraform/README.md) for complete setup instructions!
