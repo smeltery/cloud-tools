@@ -62,6 +62,8 @@ import {
 // Re-export JobStatus for test files
 export { JobStatus };
 import sharp from 'sharp';
+
+type SharpImage = ReturnType<typeof sharp>;
 import { PDFDocument } from 'pdf-lib';
 import ffmpeg from 'fluent-ffmpeg-7';
 import { promises as fs } from 'fs';
@@ -609,7 +611,7 @@ export class SharpImageConverter implements FileProcessor {
   }
 
   private async convertImage(
-    sharpImage: sharp.Sharp,
+    sharpImage: SharpImage,
     targetFormat: string
   ): Promise<ProcessingResult> {
     let buffer: Buffer;
@@ -638,11 +640,11 @@ export class SharpImageConverter implements FileProcessor {
    * Compresses an image using format-specific optimization strategies.
    *
    * @private
-   * @param {sharp.Sharp} sharpImage - Sharp image instance
+   * @param {SharpImage} sharpImage - Sharp image instance
    * @param {number} quality - Compression quality (0-100, higher means better quality)
    * @returns {Promise<ProcessingResult>} Compressed image result
    */
-  private async compressImage(sharpImage: sharp.Sharp, quality: number): Promise<ProcessingResult> {
+  private async compressImage(sharpImage: SharpImage, quality: number): Promise<ProcessingResult> {
     const metadata = await sharpImage.metadata();
     let buffer: Buffer;
     let contentType: string;
@@ -684,7 +686,7 @@ export class SharpImageConverter implements FileProcessor {
 
       case 'png':
         // PNG compression strategies based on quality
-        const pngOptions: sharp.PngOptions = {
+        const pngOptions = {
           compressionLevel: quality > 80 ? 6 : 9, // Higher compression for lower quality
           adaptiveFiltering: quality > 60,
           palette: quality < 50, // Use palette for aggressive compression

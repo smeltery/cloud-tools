@@ -23,13 +23,13 @@
     "fluent-ffmpeg-7": "^2.1.5",
     "framer-motion": "^11.18.2",
     "lucide-react": "^0.469.0",
-    "next": "15.5.9",
+    "next": "15.5.24",
     "next-themes": "^0.4.6",
     "node-calibre": "^2.1.1",
     "pdf-lib": "^1.17.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "sharp": "^0.34.3",
+    "sharp": "^0.35.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss": "^4.1.18",
     "tailwindcss-animate": "^1.0.7"
@@ -61,15 +61,15 @@
     "@types/fluent-ffmpeg": "^2.1.27",
     "@types/node": "25.0.10",
     "@types/react": "^18.3.24",
-    "@vitest/coverage-v8": "^4.0.18",
-    "@vitest/ui": "^4.0.18",
+    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/ui": "^4.1.11",
     "eslint": "^8.57.1",
-    "eslint-config-next": "^15.5.0",
+    "eslint-config-next": "^15.5.24",
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "^23.2.0",
     "prettier": "^3.6.2",
     "tsx": "^4.20.5",
     "typescript": "5.7.2",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.11"
   }
 }
