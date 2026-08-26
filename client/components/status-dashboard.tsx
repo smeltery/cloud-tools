@@ -57,7 +57,7 @@ const getStatusIcon = (status: string) => {
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: "easeInOut",
+      ease: "easeInOut" as const,
     },
   };
 

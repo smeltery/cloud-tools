@@ -97,7 +97,7 @@ export default function Footer() {
                       transition={{
                         duration: 2,
                         repeat: Infinity,
-                        ease: "easeInOut",
+                        ease: "easeInOut" as const,
                       }}
                     />
                     <span>System Status</span>
