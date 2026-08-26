@@ -1,17 +1,18 @@
-import { resolve } from "path";
+import { dirname, resolve } from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  outputFileTracingRoot: resolve(__dirname, ".."),
   experimental: {
-    externalDir: true, // Allow importing files from outside the Next.js root directory
+    externalDir: true,
   },
-  webpack: (config, { isServer }) => {
-    // Add aliases for root and client lib directories
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      "@/root-lib": resolve(process.cwd(), "..", "lib"),
-    };
-    return config;
+  turbopack: {
+    resolveAlias: {
+      "@/root-lib": resolve(__dirname, "..", "lib"),
+    },
   },
 };
 
