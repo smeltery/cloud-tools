@@ -160,11 +160,6 @@
     padding-inline: 6px;
     display: inline-grid;
   }
-  & .all-repositories {
-    color: var(--blue);
-    text-underline-offset: 3px;
-    text-decoration: underline;
-  }
   & .search-footer {
     border-top: 1px solid var(--line);
     color: var(--quiet);

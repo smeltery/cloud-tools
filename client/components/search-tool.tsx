@@ -186,9 +186,6 @@ export function SearchTool({
               <kbd>esc</kbd> Close
             </span>
           </div>
-          <a className="all-repositories" href="https://github.com/smeltery">
-            All repositories
-          </a>
         </div>
       </dialog>
     </>
