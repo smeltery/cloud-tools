@@ -16,7 +16,7 @@ export function DocsActions({ markdown }: { markdown: string }) {
       <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
         <ArrowUp size={18} /> Scroll to top
       </button>
-      <button onClick={copy}>
+      <button onClick={copy} aria-label="Copy as Markdown">
         <Copy size={18} />
         <span role="status">{status}</span>
       </button>

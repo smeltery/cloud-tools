@@ -44,12 +44,25 @@ test("navigation, search recovery and responsive layout", async ({
   ).toBe(true);
 });
 
-test("docs render diagrams and accessible navigation", async ({ page }) => {
+test("docs render diagrams and accessible navigation", async ({
+  page,
+  isMobile,
+  context,
+}) => {
   await page.goto("/docs");
   await expect(
     page.getByRole("heading", { level: 1, name: "Overview" }),
   ).toBeVisible();
   await expect(page.locator(".docs-diagram svg")).toBeVisible();
+  if (!isMobile) {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page
+      .getByRole("button", { name: "Copy as Markdown", exact: true })
+      .click();
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toContain(
+      "# Overview",
+    );
+  }
   await expect(
     page.locator(".docs-article a", { hasText: "quick start" }).first(),
   ).toHaveAttribute("href", "/docs/quick-start");
