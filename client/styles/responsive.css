@@ -10,9 +10,6 @@
   .header-search-trigger > span {
     display: none;
   }
-  .home-hero {
-    gap: 25px;
-  }
   .footer-grid {
     gap: 28px;
   }
@@ -63,31 +60,6 @@
   }
   .brand svg {
     width: 28px;
-  }
-  .home-hero {
-    grid-template-columns: 1fr;
-    padding-block: 50px 36px;
-    gap: 36px;
-  }
-  .home-hero h1 {
-    font-size: 50px;
-  }
-  .hero-intro {
-    font-size: 15px;
-  }
-  .hero-art {
-    max-width: 560px;
-  }
-  .utility-strip {
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  .utility-strip p {
-    width: 100%;
-  }
-  .utility-strip > span {
-    font-size: 11px;
-    gap: 7px;
   }
   .section-heading {
     display: block;
@@ -144,14 +116,8 @@
   .tool-card p {
     min-height: 0;
   }
-  .home-hero h1 {
-    font-size: 44px;
-  }
   .hero-actions {
     gap: 20px;
-  }
-  .utility-strip > span {
-    width: 100%;
   }
 }
 @media (max-width: 390px) {
@@ -168,9 +134,6 @@
   .mobile-panel-heading,
   .mobile-panel-footer {
     padding-inline: 18px;
-  }
-  .hero-meta {
-    font-size: 9px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -1,73 +1,85 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Cloud, Upload, SlidersHorizontal, Download, Check } from 'lucide-react';
 import { EverydayTasks, HomeGuidance } from '@/components/home-extras';
 import { tools } from '@/lib/catalog';
 export default function Home() {
   return (
     <>
-      <section className="wrap home-hero">
-        <div>
+      <section className="wrap home-hero" aria-labelledby="hero-title">
+        <div className="hero-copy">
           <p className="eyebrow">
-            <span className="blue-dot" /> THE SMELTERY FILE TOOLBOX
+            <span className="blue-dot" /> YOUR EVERYDAY FILE TOOLBOX
           </p>
-          <h1>
-            A new format.
+          <h1 id="hero-title">
+            Convert files.
             <br />
-            <em>A lighter file.</em>
-            <br />
-            Back to your day.
+            <em>Make them smaller.</em>
           </h1>
           <p className="hero-intro">
-            Convert, compress, and carry on.
-            <br />
-            Your everyday file tools, together in one place.
+            Convert images, audio, videos, and eBooks. Compress images and PDFs. Choose a tool to
+            get started.
           </p>
-          <div className="hero-actions">
-            <Link className="primary-link" href="#tools">
-              Find your tool <span aria-hidden="true">↗</span>
-            </Link>
-            <Link className="text-link" href="/docs/quick-start">
-              How it works
-            </Link>
+          <div className="hero-brands" aria-label="Built with Next.js, TypeScript, and Bun">
+            <span>OPEN SOURCE · BUILT WITH</span>
+            {[
+              ['nextdotjs', 'Next.js'],
+              ['typescript', 'TypeScript'],
+              ['bun', 'Bun'],
+            ].map(([slug, name]) => (
+              <Image
+                key={slug}
+                src={`/brands/technology/${slug}.svg`}
+                alt={name}
+                width={22}
+                height={22}
+              />
+            ))}
           </div>
-          <p className="hero-meta">
-            6 focused tools <span>·</span> Built to self-host <span>·</span> Yours to adapt
-          </p>
         </div>
-        <div className="hero-art">
-          <div className="art-caption">
-            <Cloud size={18} />
-            <span>A LITTLE UTILITY. A LOT LESS FRICTION.</span>
-          </div>
-          <Image
-            src="/conversion.svg"
-            alt="Illustration of an original PNG image and its WebP conversion in a file workspace"
-            width={600}
-            height={420}
-            priority
-          />
-          <div className="art-note">
-            <Check size={15} /> New format. New possibilities.
-          </div>
+        <div className="hero-launcher">
+          <h2>What would you like to do?</h2>
+          {['Convert', 'Compress'].map(category => (
+            <nav key={category} aria-label={`${category} a file`}>
+              <div className="hero-group-heading">
+                <h3>{category}</h3>
+                <span>{category === 'Convert' ? 'Change the format' : 'Reduce the file size'}</span>
+              </div>
+              <div className="hero-tool-grid">
+                {tools
+                  .filter(tool => tool.category === category)
+                  .map(tool => (
+                    <Link
+                      className="hero-tool"
+                      prefetch={false}
+                      key={tool.href}
+                      href={tool.href}
+                      aria-label={tool.title}
+                    >
+                      <tool.icon size={22} strokeWidth={1.6} aria-hidden="true" />
+                      <span>
+                        <strong>
+                          {tool.title.replace(' converter', '').replace(' compression', '')}
+                        </strong>
+                        <small>
+                          {tool.category === 'Convert'
+                            ? tool.formats
+                            : tool.title === 'PDF compression'
+                              ? 'Optimize your PDF'
+                              : 'Lighter images'}
+                        </small>
+                      </span>
+                    </Link>
+                  ))}
+              </div>
+            </nav>
+          ))}
+          <p className="hero-help">
+            Already uploaded? <Link href="/jobs">Find your job</Link>
+            <span>·</span>
+            <Link href="/docs/quick-start">How it works</Link>
+          </p>
         </div>
       </section>
-      <div className="wrap utility-strip">
-        <p>
-          Small changes.
-          <br />
-          <strong>More useful files.</strong>
-        </p>
-        <span>
-          <Upload /> Upload your file
-        </span>
-        <span>
-          <SlidersHorizontal /> Make it work for you
-        </span>
-        <span>
-          <Download /> Take it with you
-        </span>
-      </div>
       <section className="wrap tools-section" id="tools">
         <div className="section-heading">
           <div>

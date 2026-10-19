@@ -7,8 +7,18 @@ test("navigation, search recovery and responsive layout", async ({
 }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "A new format.",
+    "Convert files.",
   );
+  const launcher = page.locator(".hero-launcher");
+  await expect(launcher.locator(".hero-tool")).toHaveCount(6);
+  await expect(
+    launcher.getByRole("link", { name: "PDF compression", exact: true }),
+  ).toBeInViewport({ ratio: 1 });
+  await launcher
+    .getByRole("link", { name: "Image converter", exact: true })
+    .click();
+  await expect(page).toHaveURL(/tools\/converters\/image/);
+  await page.goto("/");
   if (isMobile) {
     await page.getByRole("button", { name: "Menu", exact: true }).click();
     const menu = page.getByRole("dialog", { name: "What’s next?" });

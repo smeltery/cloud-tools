@@ -8,7 +8,7 @@ do not imply endorsement of Cloud Tools.
 
 ## Technology marks
 
-The social preview uses Next.js, TypeScript, Bun, and Terraform marks from
+The website and social preview use Next.js, TypeScript, Bun, and Terraform marks from
 [Simple Icons](https://github.com/simple-icons/simple-icons/tree/develop/icons).
 The SVGs are stored locally so `bun run brand:build` needs no network access.
 These marks identify technologies used by Cloud Tools and belong to their
