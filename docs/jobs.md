@@ -20,6 +20,8 @@ The process endpoint marks a queued job as processing. That state does not prove
 
 Use the Jobs page or `GET /api/jobs?jobId=YOUR_JOB_ID`. The response includes status and, when available, progress and download URL. A missing record returns 404. Listing jobs is installation-wide, not isolated per user.
 
+The Jobs page combines recent history from the six tools on this browser. Select a file or paste a job ID to fetch its current status. Active jobs can refresh every ten seconds while the page is visible; turn off the checkbox to check manually. A failed check pauses automatic refresh and labels any previous result as stale. Recent shortcuts are local to this browser, not an installation-wide job list.
+
 ## Download a completed file
 
 Wait for `completed` and use the returned `downloadUrl`. The URL points at configured storage. Accessibility depends on endpoint reachability and bucket access settings; the current worker does not issue expiring signed URLs.
