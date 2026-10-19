@@ -1,6 +1,4 @@
-<p align="center"><img src="client/public/logo.svg" width="64" alt="Cloud Tools logo"></p>
-
-# Cloud Tools
+# <img src="client/public/logo.svg" width="40" height="40" alt=""> Cloud Tools
 
 Convert images, audio, video, and eBooks. Compress images and PDFs. A practical, self-hostable file toolbox from Smeltery.
 
