@@ -1,126 +1,199 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import {
-  Image,
-  FileAudio,
-  FileVideo,
-  BookOpen,
-  FileImage,
-  FileText,
-} from "lucide-react";
-
-interface Tool {
-  name: string;
-  href: string;
-  icon: React.ComponentType<{ className?: string }>;
-  keywords?: string[];
-}
-
-const allTools: Tool[] = [
-  {
-    name: "Image Converter",
-    href: "/tools/converters/image",
-    icon: Image,
-    keywords: ["image", "convert", "jpg", "png", "webp", "gif"],
-  },
-  {
-    name: "Audio Converter",
-    href: "/tools/converters/audio",
-    icon: FileAudio,
-    keywords: ["audio", "convert", "mp3", "wav", "ogg", "flac"],
-  },
-  {
-    name: "Video Converter",
-    href: "/tools/converters/video",
-    icon: FileVideo,
-    keywords: ["video", "convert", "mp4", "mov", "avi", "webm"],
-  },
-  {
-    name: "eBook Converter",
-    href: "/tools/converters/ebooks",
+'use client';
+import { useEffect, useId, useRef, useState } from 'react';
+import Link from 'next/link';
+import { Search, X, BookOpen, Palette, Info, FileClock, Activity } from 'lucide-react';
+import { tools, guides } from '@/lib/catalog';
+const entries = [
+  ...tools.map(t => ({ ...t, kind: 'Tools' })),
+  ...guides.map(g => ({
+    title: g.title,
+    href: `/docs/${g.slug}`,
+    description: `${g.group} · ${g.title} for Cloud Tools.`,
+    kind: 'Guides',
     icon: BookOpen,
-    keywords: ["ebook", "convert", "epub", "mobi", "pdf", "azw3"],
+  })),
+  {
+    title: 'Brand & assets',
+    icon: Palette,
+    href: '/brand',
+    description: 'Logos, colors, typography, and downloads.',
+    kind: 'Pages',
   },
   {
-    name: "Image Compression",
-    href: "/tools/compression/image",
-    icon: FileImage,
-    keywords: ["image", "compress", "jpg", "png", "webp", "gif"],
+    title: 'About Cloud Tools',
+    icon: Info,
+    href: '/about',
+    description: 'A small toolbox for everyday file work.',
+    kind: 'Pages',
   },
   {
-    name: "PDF Compression",
-    href: "/tools/compression/pdf",
-    icon: FileText,
-    keywords: ["pdf", "compress"],
+    title: 'Jobs',
+    icon: FileClock,
+    href: '/jobs',
+    description: 'Check progress and download your converted files.',
+    kind: 'Pages',
+  },
+  {
+    title: 'Service status',
+    icon: Activity,
+    href: '/status',
+    description: 'Check the health of your conversion services.',
+    kind: 'Pages',
   },
 ];
-
-export function SearchTool() {
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
-
+export function SearchTool({
+  mobile = false,
+  onNavigate,
+}: {
+  mobile?: boolean;
+  onNavigate?: () => void;
+}) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const input = useRef<HTMLInputElement>(null);
+  const id = useId();
+  const [query, setQuery] = useState('');
+  const [category, setCategory] = useState('Everything');
+  const [active, setActive] = useState(-1);
+  const matches = entries.filter(
+    item =>
+      (category === 'Everything' || item.kind === category) &&
+      `${item.title} ${item.description}`.toLowerCase().includes(query.trim().toLowerCase())
+  );
+  function open() {
+    setQuery('');
+    setCategory('Everything');
+    setActive(-1);
+    dialog.current?.showModal();
+    input.current?.focus();
+  }
   useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault();
-        setOpen((open) => !open);
+    if (mobile) return;
+    const handleKey = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        if (dialog.current?.open) dialog.current.close();
+        else open();
       }
     };
-    document.addEventListener("keydown", down);
-    return () => document.removeEventListener("keydown", down);
-  }, []);
-
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [mobile]);
   return (
     <>
-      <Button
-        variant="outline"
-        className="relative w-full justify-start text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64"
-        onClick={() => setOpen(true)}
+      <button
+        className={mobile ? 'mobile-search-trigger' : 'header-search-trigger'}
+        onClick={open}
+        aria-label="Search tools and documentation"
+        aria-haspopup="dialog"
       >
-        <span className="hidden lg:inline-flex">Search tools...</span>
-        <span className="inline-flex lg:hidden">Search...</span>
-        <kbd className="pointer-events-none absolute right-1.5 top-1/2 transform -translate-y-1/2 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-          <span className="text-xs">⌘</span>K
-        </kbd>
-      </Button>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="p-0">
-          <Command className="rounded-lg border shadow-md">
-            <CommandInput placeholder="Type a command or search..." />
-            <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
-              <CommandGroup heading="Tools">
-                {allTools.map((tool) => (
-                  <CommandItem
-                    key={tool.href}
-                    onSelect={() => {
-                      router.push(tool.href);
-                      setOpen(false);
-                    }}
-                  >
-                    <div className="flex items-center">
-                      <tool.icon className="mr-2 h-4 w-4" />
-                      <span>{tool.name}</span>
-                    </div>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </DialogContent>
-      </Dialog>
+        <Search size={18} />
+        <span>{mobile ? 'Search tools & guides' : 'Search'}</span>
+        <kbd>⌘ K</kbd>
+      </button>
+      <dialog
+        ref={dialog}
+        className="search-dialog"
+        aria-label="Search tools and documentation"
+        onClick={event => {
+          if (event.target === event.currentTarget) dialog.current?.close();
+        }}
+        onKeyDown={event => {
+          if (!['ArrowDown', 'ArrowUp'].includes(event.key) || !matches.length) return;
+          event.preventDefault();
+          const next =
+            event.key === 'ArrowDown'
+              ? (active + 1) % matches.length
+              : active <= 0
+                ? matches.length - 1
+                : active - 1;
+          setActive(next);
+          dialog.current?.querySelectorAll<HTMLAnchorElement>('.search-results a')[next]?.focus();
+        }}
+      >
+        <div className="search-header">
+          <div>
+            <p className="eyebrow">A little less looking</p>
+            <h2>Find your next step.</h2>
+          </div>
+          <button
+            className="close-overlay"
+            aria-label="Close search"
+            onClick={() => dialog.current?.close()}
+          >
+            <X size={24} />
+          </button>
+        </div>
+        <div className="search-field">
+          <label htmlFor={id}>Search tools, guides, and pages</label>
+          <input
+            ref={input}
+            id={id}
+            aria-label="Search tools and documentation"
+            placeholder="Search tools, guides, or pages…"
+            value={query}
+            onChange={e => {
+              setQuery(e.target.value);
+              setActive(-1);
+            }}
+            onKeyDown={event => {
+              if (event.key === 'Enter' && matches.length) {
+                event.preventDefault();
+                dialog.current?.querySelector<HTMLAnchorElement>('.search-results a')?.click();
+              }
+            }}
+          />
+        </div>
+        <div className="search-filters" aria-label="Filter search results">
+          {['Everything', 'Tools', 'Guides', 'Pages'].map(value => (
+            <button
+              key={value}
+              aria-pressed={category === value}
+              onClick={() => {
+                setCategory(value);
+                setActive(-1);
+              }}
+            >
+              {value}
+            </button>
+          ))}
+        </div>
+        <nav className="search-results" aria-label="Search results">
+          {matches.map((item, index) => (
+            <Link
+              href={item.href}
+              key={item.href}
+              onFocus={() => setActive(index)}
+              onClick={() => {
+                dialog.current?.close();
+                onNavigate?.();
+              }}
+            >
+              <item.icon className="result-icon" size={22} strokeWidth={1.6} aria-hidden="true" />
+              <span className="result-copy">
+                <strong>{item.title}</strong>
+                <small>{item.description}</small>
+              </span>
+              <span className="result-category">{item.kind}</span>
+            </Link>
+          ))}
+          {!matches.length && <p>No matches. Try “image”, “jobs”, or “API”.</p>}
+        </nav>
+        <div className="search-footer">
+          <span role="status">{matches.length} results</span>
+          <div className="keyboard-hints">
+            <span>
+              <kbd>↑</kbd>
+              <kbd>↓</kbd> Move
+            </span>
+            <span>
+              <kbd>↵</kbd> Open
+            </span>
+            <span>
+              <kbd>esc</kbd> Close
+            </span>
+          </div>
+        </div>
+      </dialog>
     </>
   );
 }

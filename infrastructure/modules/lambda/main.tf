@@ -6,6 +6,10 @@ terraform {
       source  = "hashicorp/aws"
       version = ">= 5.0"
     }
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 2.5"
+    }
     null = {
       source  = "hashicorp/null"
       version = ">= 3.0"
@@ -42,7 +46,7 @@ resource "aws_lambda_function" "convert" {
   function_name    = "${var.project_name}-convert-${var.environment}-${var.resource_suffix}"
   role             = var.lambda_execution_role_arn
   handler          = "index.handler"
-  source_code_hash = filebase64sha256(local.convert_lambda_path)
+  source_code_hash = data.local_file.convert_package.content_base64sha256
   runtime          = var.lambda_runtime
   timeout          = var.lambda_timeout
   memory_size      = var.lambda_memory_size
@@ -96,7 +100,7 @@ resource "aws_lambda_function" "compress" {
   function_name    = "${var.project_name}-compress-${var.environment}-${var.resource_suffix}"
   role             = var.lambda_execution_role_arn
   handler          = "index.handler"
-  source_code_hash = filebase64sha256(local.compress_lambda_path)
+  source_code_hash = data.local_file.compress_package.content_base64sha256
   runtime          = var.lambda_runtime
   timeout          = var.lambda_timeout
   memory_size      = var.lambda_memory_size
@@ -148,7 +152,7 @@ resource "aws_lambda_function" "process" {
   function_name    = "${var.project_name}-process-${var.environment}-${var.resource_suffix}"
   role             = var.lambda_execution_role_arn
   handler          = "index.handler"
-  source_code_hash = filebase64sha256(local.process_lambda_path)
+  source_code_hash = data.local_file.process_package.content_base64sha256
   runtime          = var.lambda_runtime
   timeout          = var.lambda_timeout
   memory_size      = var.lambda_memory_size
@@ -224,4 +228,22 @@ resource "aws_cloudwatch_log_group" "process" {
   tags = merge(var.tags, {
     Name = "${var.project_name}-${var.environment}-process-logs"
   })
+}
+
+# Read the artifact after the build, including on a fresh checkout.
+data "local_file" "convert_package" {
+  filename   = local.convert_lambda_path
+  depends_on = [null_resource.build_lambda_packages]
+}
+
+# Read the artifact after the build, including on a fresh checkout.
+data "local_file" "compress_package" {
+  filename   = local.compress_lambda_path
+  depends_on = [null_resource.build_lambda_packages]
+}
+
+# Read the artifact after the build, including on a fresh checkout.
+data "local_file" "process_package" {
+  filename   = local.process_lambda_path
+  depends_on = [null_resource.build_lambda_packages]
 }

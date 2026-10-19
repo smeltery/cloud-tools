@@ -387,7 +387,7 @@ def verify_permissions():
 
 ### Common Permission Issues
 
-**S3 Access Denied**
+### S3 Access Denied
 
 ```bash
 # Check S3 bucket policy and IAM policy alignment
@@ -395,7 +395,7 @@ aws s3api get-bucket-policy --bucket bucket-name
 aws iam get-role-policy --role-name role-name --policy-name policy-name
 ```
 
-**DynamoDB Permission Errors**
+### DynamoDB Permission Errors
 
 ```bash
 # Verify table and index permissions
@@ -403,7 +403,7 @@ aws dynamodb describe-table --table-name table-name
 aws iam simulate-principal-policy --policy-source-arn role-arn --action-names dynamodb:GetItem
 ```
 
-**SQS Permission Issues**
+### SQS Permission Issues
 
 ```bash
 # Check queue permissions and policy

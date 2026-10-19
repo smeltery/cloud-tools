@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import { File, Image as ImageIcon } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { File, Image as ImageIcon } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 interface SelectedFileProps {
   file: File;
@@ -14,7 +14,7 @@ export function SelectedFile({ file, fileType }: SelectedFileProps) {
 
   // Helper function to check if file is an image
   const isImageFile = (file: File): boolean => {
-    return file.type.startsWith("image/");
+    return file.type.startsWith('image/');
   };
 
   // Generate preview URL for images
@@ -56,14 +56,10 @@ export function SelectedFile({ file, fileType }: SelectedFileProps) {
         )}
       </div>
       <div className="flex-grow min-w-0">
-        <p className="text-sm font-medium text-foreground truncate">
-          {file.name}
-        </p>
+        <p className="text-sm font-medium text-foreground truncate">{file.name}</p>
         <div className="flex items-center space-x-2 text-sm text-muted-foreground">
           <span>{(file.size / 1024 / 1024).toFixed(2)} MB</span>
-          {isImageFile(file) && previewUrl && !imageLoadError && (
-            <span>• Image preview</span>
-          )}
+          {isImageFile(file) && previewUrl && !imageLoadError && <span>• Image preview</span>}
         </div>
       </div>
       {fileType && (

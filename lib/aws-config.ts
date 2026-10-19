@@ -17,10 +17,10 @@
  * @since 1.0.0
  */
 
-import { S3Client } from '@aws-sdk/client-s3';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { SQSClient } from '@aws-sdk/client-sqs';
-import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+import { S3Client } from "@aws-sdk/client-s3";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { SQSClient } from "@aws-sdk/client-sqs";
+import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
 /**
  * Determines if the application is running in development mode with LocalStack.
@@ -28,7 +28,8 @@ import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
  * @private
  * @type {boolean}
  */
-const isLocal = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test';
+const isLocal =
+  process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test";
 
 /**
  * AWS endpoint URL for LocalStack development or undefined for production AWS.
@@ -48,12 +49,12 @@ const endpoint = isLocal ? process.env.AWS_ENDPOINT_URL : undefined;
  * @type {object}
  */
 const awsConfig = {
-  region: process.env.AWS_REGION || 'us-east-1',
+  region: process.env.AWS_REGION || "us-east-1",
   endpoint,
   credentials: isLocal
     ? {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'test',
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'test',
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || "test",
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "test",
       }
     : undefined,
 };
@@ -194,11 +195,11 @@ export const sqsClient = new SQSClient({
  * @since 1.0.0
  */
 export const AWS_RESOURCES = {
-  S3_BUCKET: process.env.S3_BUCKET_NAME || 'cloud-tools-local-bucket',
-  DYNAMODB_TABLE: process.env.DDB_TABLE_NAME || 'CloudToolsJobs',
-  SQS_QUEUE: process.env.SQS_QUEUE_NAME || 'cloud-tools-jobs-queue',
+  S3_BUCKET: process.env.S3_BUCKET_NAME || "cloud-tools-local-bucket",
+  DYNAMODB_TABLE: process.env.DDB_TABLE_NAME || "CloudToolsJobs",
+  SQS_QUEUE: process.env.SQS_QUEUE_NAME || "cloud-tools-jobs-queue",
   SQS_QUEUE_URL: isLocal
-    ? `http://localhost:4566/000000000000/${process.env.SQS_QUEUE_NAME || 'cloud-tools-jobs-queue'}`
+    ? `http://localhost:4566/000000000000/${process.env.SQS_QUEUE_NAME || "cloud-tools-jobs-queue"}`
     : undefined, // Will be retrieved dynamically in production
 } as const;
 
@@ -227,13 +228,13 @@ export const AWS_RESOURCES = {
  */
 export enum JobStatus {
   /** Job has been created but not yet started processing */
-  PENDING = 'pending',
+  PENDING = "pending",
   /** Job is currently being processed by a worker */
-  PROCESSING = 'processing',
+  PROCESSING = "processing",
   /** Job has been successfully completed */
-  COMPLETED = 'completed',
+  COMPLETED = "completed",
   /** Job processing has failed */
-  FAILED = 'failed',
+  FAILED = "failed",
 }
 
 /**
@@ -259,17 +260,17 @@ export enum JobStatus {
  */
 export enum JobType {
   /** Convert image files between different formats (JPEG, PNG, WebP, etc.) */
-  IMAGE_CONVERSION = 'image_conversion',
+  IMAGE_CONVERSION = "image_conversion",
   /** Compress image files to reduce file size while maintaining quality */
-  IMAGE_COMPRESSION = 'image_compression',
+  IMAGE_COMPRESSION = "image_compression",
   /** Convert video files between different formats and codecs */
-  VIDEO_CONVERSION = 'video_conversion',
+  VIDEO_CONVERSION = "video_conversion",
   /** Convert audio files between different formats and codecs */
-  AUDIO_CONVERSION = 'audio_conversion',
+  AUDIO_CONVERSION = "audio_conversion",
   /** Compress PDF files to reduce file size */
-  PDF_COMPRESSION = 'pdf_compression',
+  PDF_COMPRESSION = "pdf_compression",
   /** Convert eBook files between different formats (EPUB, MOBI, etc.) */
-  EBOOK_CONVERSION = 'ebook_conversion',
+  EBOOK_CONVERSION = "ebook_conversion",
 }
 
 /**
@@ -298,14 +299,16 @@ export enum JobType {
  *
  * @since 1.0.0
  */
-export async function getSQSQueueUrl(queueName: string = AWS_RESOURCES.SQS_QUEUE): Promise<string> {
+export async function getSQSQueueUrl(
+  queueName: string = AWS_RESOURCES.SQS_QUEUE,
+): Promise<string> {
   if (isLocal) {
     // For LocalStack, always use our manually constructed URL to avoid DNS issues
     return `http://localhost:4566/000000000000/${queueName}`;
   }
 
   // In production, get the queue URL dynamically
-  const { GetQueueUrlCommand } = await import('@aws-sdk/client-sqs');
+  const { GetQueueUrlCommand } = await import("@aws-sdk/client-sqs");
   const command = new GetQueueUrlCommand({ QueueName: queueName });
   const response = await sqsClient.send(command);
 
@@ -361,9 +364,13 @@ export async function getS3BucketName(): Promise<string> {
  *
  * @since 1.0.0
  */
-export function generateS3Key(jobId: string, fileName: string, folder: string = 'uploads'): string {
-  const timestamp = new Date().toISOString().split('T')[0];
-  const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, '_');
+export function generateS3Key(
+  jobId: string,
+  fileName: string,
+  folder: string = "uploads",
+): string {
+  const timestamp = new Date().toISOString().split("T")[0];
+  const sanitizedFileName = fileName.replace(/[^a-zA-Z0-9.-]/g, "_");
   return `${folder}/${timestamp}/${jobId}/${sanitizedFileName}`;
 }
 
@@ -388,12 +395,12 @@ export function generateS3Key(jobId: string, fileName: string, folder: string = 
  * @since 1.0.0
  */
 export function getFileExtension(fileName: string): string {
-  const parts = fileName.split('.');
-  if (parts.length === 1 || (parts.length === 2 && parts[0] === '')) {
+  const parts = fileName.split(".");
+  if (parts.length === 1 || (parts.length === 2 && parts[0] === "")) {
     // No extension (e.g., 'README') or hidden file (e.g., '.gitignore')
-    return parts.length === 2 ? parts[1].toLowerCase() : '';
+    return parts.length === 2 ? parts[1].toLowerCase() : "";
   }
-  return parts.pop()?.toLowerCase() || '';
+  return parts.pop()?.toLowerCase() || "";
 }
 
 /**
@@ -434,29 +441,42 @@ export function getFileExtension(fileName: string): string {
  *
  * @since 1.0.0
  */
-export function getJobTypeFromFile(fileName: string, operation: 'convert' | 'compress'): JobType {
+export function getJobTypeFromFile(
+  fileName: string,
+  operation: "convert" | "compress",
+): JobType {
   const extension = getFileExtension(fileName);
 
-  if (operation === 'compress') {
-    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(extension)) {
+  if (operation === "compress") {
+    if (["jpg", "jpeg", "png", "gif", "webp", "bmp"].includes(extension)) {
       return JobType.IMAGE_COMPRESSION;
     }
-    if (extension === 'pdf') {
+    if (extension === "pdf") {
       return JobType.PDF_COMPRESSION;
     }
   }
 
-  if (operation === 'convert') {
-    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'tiff', 'svg'].includes(extension)) {
+  if (operation === "convert") {
+    if (
+      ["jpg", "jpeg", "png", "gif", "webp", "bmp", "tiff", "svg"].includes(
+        extension,
+      )
+    ) {
       return JobType.IMAGE_CONVERSION;
     }
-    if (['mp4', 'avi', 'mov', 'mkv', 'wmv', 'flv', 'webm'].includes(extension)) {
+    if (
+      ["mp4", "avi", "mov", "mkv", "wmv", "flv", "webm"].includes(extension)
+    ) {
       return JobType.VIDEO_CONVERSION;
     }
-    if (['mp3', 'wav', 'flac', 'aac', 'ogg', 'm4a', 'wma'].includes(extension)) {
+    if (
+      ["mp3", "wav", "flac", "aac", "ogg", "m4a", "wma"].includes(extension)
+    ) {
       return JobType.AUDIO_CONVERSION;
     }
-    if (['epub', 'mobi', 'azw', 'pdf', 'txt', 'doc', 'docx'].includes(extension)) {
+    if (
+      ["epub", "mobi", "azw", "pdf", "txt", "doc", "docx"].includes(extension)
+    ) {
       return JobType.EBOOK_CONVERSION;
     }
   }

@@ -17,7 +17,7 @@ This Terraform module creates AWS Lambda functions for file processing operation
 
 ## Architecture
 
-```
+```text
 terraform/modules/lambda/
 ├── src/                          # TypeScript source code
 │   ├── handlers/                 # Lambda function handlers
@@ -132,14 +132,14 @@ The module automatically builds Lambda packages when:
 2. **Build Script Changes**: The build.sh script is updated
 3. **Terraform Apply**: During infrastructure deployment
 
-### Build Steps:
+### Build Steps
 
 1. **TypeScript Compilation**: Uses esbuild for fast, optimized bundling
 2. **Dependency Installation**: Installs production dependencies (Sharp, FFmpeg, etc.)
 3. **Package Creation**: Creates ZIP files for Lambda deployment
 4. **Size Optimization**: Excludes source maps and dev dependencies
 
-### Manual Build:
+### Manual Build
 
 ```bash
 cd terraform/modules/lambda
@@ -183,9 +183,9 @@ Required tools for building:
 
 This module now uses real TypeScript handlers instead of JavaScript templates:
 
-### Before (Template-Based):
+### Before (Template-Based)
 
-```
+```text
 lambda-templates/
 ├── convert.js      # Basic placeholder code
 ├── compress.js     # Basic placeholder code
@@ -193,9 +193,9 @@ lambda-templates/
 └── package.json    # Simple dependencies
 ```
 
-### After (TypeScript Integration):
+### After (TypeScript Integration)
 
-```
+```text
 src/
 ├── handlers/       # Production TypeScript handlers
 ├── adapters/       # AWS service integrations
@@ -203,7 +203,7 @@ src/
 └── tsconfig.json   # TypeScript configuration
 ```
 
-### Benefits:
+### Benefits
 
 - **Real Processing**: Actual file conversion/compression using your worker.ts
 - **Type Safety**: Full TypeScript support with compile-time checks

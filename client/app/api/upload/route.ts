@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { PutCommand } from "@aws-sdk/lib-dynamodb";
+import { NextRequest, NextResponse } from 'next/server';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { PutCommand } from '@aws-sdk/lib-dynamodb';
 import {
   s3Client,
   docClient,
@@ -8,24 +8,24 @@ import {
   generateS3Key,
   getJobTypeFromFile,
   JobStatus,
-} from "@/root-lib/aws-config";
+} from '@/root-lib/aws-config';
 
 export async function POST(request: NextRequest) {
   try {
     // Parse form data
     const formData = await request.formData();
-    const file = formData.get("file") as File;
-    const operation = formData.get("operation") as string; // 'convert' or 'compress'
-    const targetFormat = formData.get("targetFormat") as string; // target format (optional)
+    const file = formData.get('file') as File;
+    const operation = formData.get('operation') as string; // 'convert' or 'compress'
+    const targetFormat = formData.get('targetFormat') as string; // target format (optional)
 
     if (!file) {
-      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    if (!operation || !["convert", "compress"].includes(operation)) {
+    if (!operation || !['convert', 'compress'].includes(operation)) {
       return NextResponse.json(
         { error: 'Invalid operation. Must be "convert" or "compress"' },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         originalName: file.name,
         jobId: jobId,
         operation: operation,
-        targetFormat: targetFormat || "",
+        targetFormat: targetFormat || '',
         uploadedAt: new Date().toISOString(),
       },
     });
@@ -54,10 +54,7 @@ export async function POST(request: NextRequest) {
     await s3Client.send(uploadCommand);
 
     // Determine job type
-    const jobType = getJobTypeFromFile(
-      file.name,
-      operation as "convert" | "compress",
-    );
+    const jobType = getJobTypeFromFile(file.name, operation as 'convert' | 'compress');
 
     // Create job record in DynamoDB
     const now = new Date().toISOString();
@@ -99,13 +96,13 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Upload error:", error);
+    console.error('Upload error:', error);
     return NextResponse.json(
       {
-        error: "Upload failed",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Upload failed',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -115,9 +112,9 @@ export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
     },
   });
 }

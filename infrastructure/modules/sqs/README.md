@@ -434,7 +434,7 @@ module "sqs_cost_optimized" {
 
 ### Common Issues
 
-**Messages Not Being Processed**
+### Messages Not Being Processed
 
 ```bash
 # Check queue depth
@@ -447,7 +447,7 @@ aws lambda list-event-source-mappings \
   --function-name function-name
 ```
 
-**Messages Going to DLQ**
+### Messages Going to DLQ
 
 ```bash
 # Check DLQ for failed messages
@@ -462,7 +462,7 @@ aws sqs receive-message \
   --message-attribute-names All
 ```
 
-**Permission Issues**
+### Permission Issues
 
 ```bash
 # Verify queue policy
@@ -479,7 +479,7 @@ aws iam simulate-principal-policy \
 
 ### Debug Tools
 
-**Message Inspection**
+### Message Inspection
 
 ```python
 # Peek at messages without removing them
@@ -501,7 +501,7 @@ def peek_messages(queue_url, max_messages=10):
     return messages
 ```
 
-**Queue Purging**
+### Queue Purging
 
 ```python
 # Clear all messages (use with caution)

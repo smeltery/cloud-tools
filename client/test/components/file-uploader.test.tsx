@@ -1,7 +1,7 @@
-import React from "react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import React from 'react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 // Mock the file-uploader component functionality
 // Since we don't have access to the actual component, this is a basic example
@@ -30,10 +30,7 @@ const MockFileUploader = ({
         onChange={handleFileChange}
         accept="image/*,video/*,audio/*,.pdf,.epub,.mobi,.docx"
       />
-      <select
-        data-testid="operation-select"
-        onChange={(e) => onOperationChange?.(e.target.value)}
-      >
+      <select data-testid="operation-select" onChange={e => onOperationChange?.(e.target.value)}>
         <option value="convert">Convert</option>
         <option value="compress">Compress</option>
       </select>
@@ -44,7 +41,7 @@ const MockFileUploader = ({
   );
 };
 
-describe("FileUploader Component", () => {
+describe('FileUploader Component', () => {
   const mockOnFileUpload = vi.fn();
   const mockOnOperationChange = vi.fn();
 
@@ -52,80 +49,63 @@ describe("FileUploader Component", () => {
     vi.clearAllMocks();
   });
 
-  it("should render file input and operation selector", () => {
+  it('should render file input and operation selector', () => {
     render(
-      <MockFileUploader
-        onFileUpload={mockOnFileUpload}
-        onOperationChange={mockOnOperationChange}
-      />,
+      <MockFileUploader onFileUpload={mockOnFileUpload} onOperationChange={mockOnOperationChange} />
     );
 
-    expect(screen.getByTestId("file-input")).toBeInTheDocument();
-    expect(screen.getByTestId("operation-select")).toBeInTheDocument();
-    expect(screen.getByTestId("upload-button")).toBeInTheDocument();
+    expect(screen.getByTestId('file-input')).toBeInTheDocument();
+    expect(screen.getByTestId('operation-select')).toBeInTheDocument();
+    expect(screen.getByTestId('upload-button')).toBeInTheDocument();
   });
 
-  it("should handle file selection", async () => {
+  it('should handle file selection', async () => {
     const user = userEvent.setup();
     render(
-      <MockFileUploader
-        onFileUpload={mockOnFileUpload}
-        onOperationChange={mockOnOperationChange}
-      />,
+      <MockFileUploader onFileUpload={mockOnFileUpload} onOperationChange={mockOnOperationChange} />
     );
 
-    const file = new File(["test content"], "test.jpg", { type: "image/jpeg" });
-    const fileInput = screen.getByTestId("file-input") as HTMLInputElement;
+    const file = new File(['test content'], 'test.jpg', { type: 'image/jpeg' });
+    const fileInput = screen.getByTestId('file-input') as HTMLInputElement;
 
     await user.upload(fileInput, file);
 
     expect(mockOnFileUpload).toHaveBeenCalledWith(file);
   });
 
-  it("should handle operation change", async () => {
+  it('should handle operation change', async () => {
     const user = userEvent.setup();
     render(
-      <MockFileUploader
-        onFileUpload={mockOnFileUpload}
-        onOperationChange={mockOnOperationChange}
-      />,
+      <MockFileUploader onFileUpload={mockOnFileUpload} onOperationChange={mockOnOperationChange} />
     );
 
-    const operationSelect = screen.getByTestId("operation-select");
-    await user.selectOptions(operationSelect, "compress");
+    const operationSelect = screen.getByTestId('operation-select');
+    await user.selectOptions(operationSelect, 'compress');
 
-    expect(mockOnOperationChange).toHaveBeenCalledWith("compress");
+    expect(mockOnOperationChange).toHaveBeenCalledWith('compress');
   });
 
-  it("should have correct file type acceptance", () => {
+  it('should have correct file type acceptance', () => {
     render(
-      <MockFileUploader
-        onFileUpload={mockOnFileUpload}
-        onOperationChange={mockOnOperationChange}
-      />,
+      <MockFileUploader onFileUpload={mockOnFileUpload} onOperationChange={mockOnOperationChange} />
     );
 
-    const fileInput = screen.getByTestId("file-input") as HTMLInputElement;
-    expect(fileInput.accept).toBe(
-      "image/*,video/*,audio/*,.pdf,.epub,.mobi,.docx",
-    );
+    const fileInput = screen.getByTestId('file-input') as HTMLInputElement;
+    expect(fileInput.accept).toBe('image/*,video/*,audio/*,.pdf,.epub,.mobi,.docx');
   });
 
-  it("should handle multiple file types", async () => {
+  it('should handle multiple file types', async () => {
     const user = userEvent.setup();
     render(
-      <MockFileUploader
-        onFileUpload={mockOnFileUpload}
-        onOperationChange={mockOnOperationChange}
-      />,
+      <MockFileUploader onFileUpload={mockOnFileUpload} onOperationChange={mockOnOperationChange} />
     );
 
-    const fileInput = screen.getByTestId("file-input") as HTMLInputElement;
+    const fileInput = screen.getByTestId('file-input') as HTMLInputElement;
 
     // Test different file types
-    const imageFile = new File([""], "test.png", { type: "image/png" });
-    const videoFile = new File([""], "test.mp4", { type: "video/mp4" });
-    const pdfFile = new File([""], "test.pdf", { type: "application/pdf" });
+    const imageFile = new File([''], 'test.png', { type: 'image/png' });
+    const videoFile = new File([''], 'test.mp4', { type: 'video/mp4' });
+    const pdfFile = new File([''], 'test.pdf', { type: 'application/pdf' });
 
     await user.upload(fileInput, imageFile);
     expect(mockOnFileUpload).toHaveBeenCalledWith(imageFile);
@@ -137,16 +117,13 @@ describe("FileUploader Component", () => {
     expect(mockOnFileUpload).toHaveBeenCalledWith(pdfFile);
   });
 
-  it("should not call onFileUpload when no file is selected", async () => {
+  it('should not call onFileUpload when no file is selected', async () => {
     const user = userEvent.setup();
     render(
-      <MockFileUploader
-        onFileUpload={mockOnFileUpload}
-        onOperationChange={mockOnOperationChange}
-      />,
+      <MockFileUploader onFileUpload={mockOnFileUpload} onOperationChange={mockOnOperationChange} />
     );
 
-    const fileInput = screen.getByTestId("file-input");
+    const fileInput = screen.getByTestId('file-input');
 
     // Simulate clicking the file input without selecting a file
     await user.click(fileInput);

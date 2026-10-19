@@ -1,179 +1,125 @@
-"use client";
-
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Users, Target, Shield } from "lucide-react";
-import { PageTransition } from "@/components/page-transition";
-
-const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5 },
+import Link from 'next/link';
+import { FileStack, Server, Code2 } from 'lucide-react';
+import { NextStep, Questions } from '@/components/next-step';
+export const metadata = {
+  title: 'About Cloud Tools',
+  description:
+    'Six focused file tools from Smeltery. Convert, compress, or run the toolbox on your own infrastructure.',
 };
-
 export default function AboutPage() {
   return (
-    <PageTransition>
-      <div className="flex flex-col min-h-screen">
-        {/* Hero Section */}
-        <motion.section
-          className="bg-gradient-to-br from-primary to-primary/70 text-primary-foreground py-24 md:py-32"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <motion.h1
-                className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight"
-                variants={fadeInUp}
-                initial="initial"
-                animate="animate"
-              >
-                About Cloud Tools
-              </motion.h1>
-              <motion.p
-                className="text-xl md:text-2xl opacity-90"
-                variants={fadeInUp}
-                initial="initial"
-                animate="animate"
-                transition={{ delay: 0.2 }}
-              >
-                Empowering users with efficient file management solutions
-              </motion.p>
-            </div>
+    <div className="wrap">
+      <header className="editorial-hero">
+        <p className="eyebrow">A SMELTERY PROJECT</p>
+        <h1>
+          Less file friction.
+          <br />
+          <em>More useful files.</em>
+        </h1>
+        <p>
+          Cloud Tools brings six everyday file tasks into one place: image, audio, video, and eBook
+          conversion, plus image and PDF compression.
+        </p>
+        <nav className="hero-actions" aria-label="Start using Cloud Tools">
+          <Link className="primary-link" href="/">
+            Choose a tool
+          </Link>
+          <Link className="text-link" href="/docs/quick-start">
+            See how it works
+          </Link>
+        </nav>
+      </header>
+      <section className="editorial-section" aria-labelledby="about-paths">
+        <p className="eyebrow">MAKE IT USEFUL TO YOU</p>
+        <h2 id="about-paths">One toolbox. Your way in.</h2>
+        <div className="guide-grid">
+          {[
+            {
+              icon: FileStack,
+              title: 'For your next file',
+              text: 'Choose a format or compression tool, upload a file, and follow its job to the finished download. Keep the original while you check the result.',
+              href: '/docs/formats',
+              label: 'Find the right format',
+            },
+            {
+              icon: Server,
+              title: 'For your own setup',
+              text: 'Run the interface locally, develop with LocalStack, or configure an AWS deployment. Storage, workers, access, and retention belong to your installation.',
+              href: '/docs/deployment',
+              label: 'Explore self-hosting',
+            },
+            {
+              icon: Code2,
+              title: 'For a better toolbox',
+              text: 'Read the source, report an issue, or contribute an improvement. Bun and Flox provide the development environment, with shared checks before changes ship.',
+              href: '/docs/development',
+              label: 'Start contributing',
+            },
+          ].map(({ icon: Icon, title, text, href, label }) => (
+            <article key={href}>
+              <Icon size={27} strokeWidth={1.5} aria-hidden="true" />
+              <h3>{title}</h3>
+              <p>{text}</p>
+              <Link className="text-link" href={href}>
+                {label}
+              </Link>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section className="editorial-section faq-section" aria-labelledby="about-details">
+        <div>
+          <p className="eyebrow">CLEAR ABOUT THE DETAILS</p>
+          <h2 id="about-details">Know the tools you use.</h2>
+          <p>
+            A Next.js interface, a TypeScript worker, AWS-compatible storage and queues, and
+            Terraform connect the upload to its result.
+          </p>
+          <div className="hero-actions">
+            <a className="text-link" href="https://github.com/smeltery/cloud-tools">
+              Explore the source
+            </a>
+            <Link className="text-link" href="/docs/architecture">
+              How it’s built
+            </Link>
           </div>
-        </motion.section>
-
-        {/* Main Content */}
-        <main className="flex-grow bg-background">
-          {/* Our Story Section */}
-          <motion.section
-            className="py-16 md:py-24"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-            transition={{ delay: 0.4 }}
-          >
-            <div className="container mx-auto px-4">
-              <h2 className="text-3xl font-bold text-center mb-8">Our Story</h2>
-              <div className="max-w-3xl mx-auto">
-                <p className="text-lg mb-6">
-                  Cloud Tools was founded in 2025 with a simple mission: to make
-                  file conversion and compression accessible to everyone. We
-                  recognized the challenges people face when dealing with
-                  incompatible file formats or oversized files, and we set out
-                  to create a solution that&rsquo;s both powerful and easy to
-                  use.
-                </p>
-                <p className="text-lg mb-6">
-                  Our team of passionate developers and designers worked
-                  tirelessly to create a suite of cloud-based tools that can
-                  handle a wide range of file types and operations. We believe
-                  that technology should simplify your life, not complicate it,
-                  and that&rsquo;s the principle that guides everything we do.
-                </p>
-                <p className="text-lg">
-                  Today, Cloud Tools serves thousands of users worldwide,
-                  helping them convert, compress, and manage their files with
-                  ease. We&rsquo;re constantly innovating and expanding our
-                  offerings to meet the evolving needs of our users.
-                </p>
-              </div>
-            </div>
-          </motion.section>
-
-          {/* Our Values Section */}
-          <motion.section
-            className="bg-secondary py-16 md:py-24"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-            transition={{ delay: 0.6 }}
-          >
-            <div className="container mx-auto px-4">
-              <h2 className="text-3xl font-bold text-center mb-12">
-                Our Values
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <motion.div variants={fadeInUp} transition={{ delay: 0.8 }}>
-                  <Card>
-                    <CardContent className="p-6 text-center">
-                      <Users className="h-12 w-12 text-primary mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold mb-2">
-                        User-Centric
-                      </h3>
-                      <p className="text-muted-foreground">
-                        We put our users first in everything we do, constantly
-                        seeking feedback and improving our tools to meet their
-                        needs.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-                <motion.div variants={fadeInUp} transition={{ delay: 1 }}>
-                  <Card>
-                    <CardContent className="p-6 text-center">
-                      <Target className="h-12 w-12 text-primary mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold mb-2">Innovation</h3>
-                      <p className="text-muted-foreground">
-                        We&rsquo;re always pushing the boundaries of
-                        what&rsquo;s possible, striving to create cutting-edge
-                        solutions for file management.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-                <motion.div variants={fadeInUp} transition={{ delay: 1.2 }}>
-                  <Card>
-                    <CardContent className="p-6 text-center">
-                      <Shield className="h-12 w-12 text-primary mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold mb-2">Security</h3>
-                      <p className="text-muted-foreground">
-                        We prioritize the security and privacy of our
-                        users&rsquo; data, implementing robust measures to
-                        protect their files.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              </div>
-            </div>
-          </motion.section>
-
-          {/* Call to Action */}
-          <motion.section
-            className="bg-gradient-to-br from-primary to-primary/70 text-primary-foreground py-20"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-            transition={{ delay: 1.4 }}
-          >
-            <div className="container mx-auto px-4">
-              <div className="max-w-4xl mx-auto text-center">
-                <h2 className="text-4xl font-bold mb-6">
-                  Ready to Transform Your Files?
-                </h2>
-                <p className="text-xl mb-10 opacity-90">
-                  Join thousands of satisfied users and experience the power of
-                  Cloud Tools today.
-                </p>
-                <Link href="/tools/converters/image">
-                  <Button
-                    size="lg"
-                    variant="secondary"
-                    className="font-semibold text-primary hover:text-primary bg-secondary hover:bg-secondary-dark transition-colors duration-200 ease-in-out px-8 py-3 shadow-md hover:shadow-lg transform hover:scale-105"
-                  >
-                    Get Started <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </motion.section>
-        </main>
-      </div>
-    </PageTransition>
+        </div>
+        <div>
+          <Questions
+            items={[
+              [
+                'Where are my files processed?',
+                'Files are uploaded to this installation’s storage and processed by a worker, not entirely in your browser. Ask the operator about access and retention before uploading sensitive files.',
+              ],
+              [
+                'What should I expect from a result?',
+                'Format support depends on the engines available on your installation. Compression savings vary; PDF optimization focuses on structure and metadata. Compare the result with your original.',
+              ],
+              [
+                'How is Cloud Tools licensed?',
+                'Cloud Tools is a Smeltery project under the PolyForm Shield license. Review the full license before adapting or distributing it; its permissions and restrictions apply.',
+              ],
+            ]}
+          />
+          <nav className="hero-actions" aria-label="Project policies">
+            <Link className="text-link" href="/privacy-policy">
+              File privacy
+            </Link>
+            <a
+              className="text-link"
+              href="https://github.com/smeltery/cloud-tools/blob/master/LICENSE"
+            >
+              Read the license
+            </a>
+          </nav>
+        </div>
+      </section>
+      <NextStep
+        title="Let’s make that file useful."
+        description="Pick a conversion or compression tool. Your next step is one click away."
+        href="/"
+        label="Choose your tool"
+      />
+    </div>
   );
 }

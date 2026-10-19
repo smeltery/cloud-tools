@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { SendMessageCommand } from "@aws-sdk/client-sqs";
-import { sqsClient, getSQSQueueUrl, JobStatus } from "@/root-lib/aws-config";
+import { NextRequest, NextResponse } from 'next/server';
+import { SendMessageCommand } from '@aws-sdk/client-sqs';
+import { sqsClient, getSQSQueueUrl, JobStatus } from '@/root-lib/aws-config';
 
 export interface ProcessRequest {
   jobId: string;
-  operation: "convert" | "compress";
+  operation: 'convert' | 'compress';
   targetFormat?: string;
   quality?: number;
   options?: Record<string, unknown>;
@@ -17,16 +17,13 @@ export async function POST(request: NextRequest) {
     const { jobId, operation, targetFormat, quality, options } = body;
 
     if (!jobId || !operation) {
-      return NextResponse.json(
-        { error: "Job ID and operation are required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Job ID and operation are required' }, { status: 400 });
     }
 
-    if (!["convert", "compress"].includes(operation)) {
+    if (!['convert', 'compress'].includes(operation)) {
       return NextResponse.json(
         { error: 'Invalid operation. Must be "convert" or "compress"' },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -35,7 +32,7 @@ export async function POST(request: NextRequest) {
       jobId,
       operation,
       targetFormat,
-      quality: quality || (operation === "compress" ? 80 : undefined),
+      quality: quality || (operation === 'compress' ? 80 : undefined),
       options: options || {},
       timestamp: new Date().toISOString(),
       retryCount: 0,
@@ -51,16 +48,16 @@ export async function POST(request: NextRequest) {
       MessageAttributes: {
         jobId: {
           StringValue: jobId,
-          DataType: "String",
+          DataType: 'String',
         },
         operation: {
           StringValue: operation,
-          DataType: "String",
+          DataType: 'String',
         },
         ...(targetFormat && {
           targetFormat: {
             StringValue: targetFormat,
-            DataType: "String",
+            DataType: 'String',
           },
         }),
       },
@@ -78,49 +75,45 @@ export async function POST(request: NextRequest) {
         jobId,
         messageId: result.MessageId,
         queueUrl,
-        message: "Job queued for processing",
+        message: 'Job queued for processing',
       },
     });
   } catch (error) {
-    console.error("Process job error:", error);
+    console.error('Process job error:', error);
     return NextResponse.json(
       {
-        error: "Failed to queue job for processing",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to queue job for processing',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
 
 // Helper function to update job status
-async function updateJobStatus(
-  jobId: string,
-  status: JobStatus,
-  progress?: number,
-) {
+async function updateJobStatus(jobId: string, status: JobStatus, progress?: number) {
   try {
     // Call the jobs API to update status
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/jobs`,
+      `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/jobs`,
       {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           jobId,
           status,
           progress,
         }),
-      },
+      }
     );
 
     if (!response.ok) {
-      console.error("Failed to update job status:", await response.text());
+      console.error('Failed to update job status:', await response.text());
     }
   } catch (error) {
-    console.error("Error updating job status:", error);
+    console.error('Error updating job status:', error);
   }
 }
 
@@ -128,9 +121,9 @@ async function updateJobStatus(
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const action = searchParams.get("action");
+    const action = searchParams.get('action');
 
-    if (action === "queue-status") {
+    if (action === 'queue-status') {
       // Get queue attributes (approximate message count, etc.)
       const queueUrl = await getSQSQueueUrl();
 
@@ -142,23 +135,23 @@ export async function GET(request: NextRequest) {
           queueUrl,
           approximateNumberOfMessages: 0,
           approximateNumberOfMessagesNotVisible: 0,
-          status: "available",
+          status: 'available',
         },
       });
     }
 
     return NextResponse.json(
-      { error: "Invalid action. Use ?action=queue-status" },
-      { status: 400 },
+      { error: 'Invalid action. Use ?action=queue-status' },
+      { status: 400 }
     );
   } catch (error) {
-    console.error("Get queue status error:", error);
+    console.error('Get queue status error:', error);
     return NextResponse.json(
       {
-        error: "Failed to get queue status",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to get queue status',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -167,13 +160,10 @@ export async function GET(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const jobId = searchParams.get("jobId");
+    const jobId = searchParams.get('jobId');
 
     if (!jobId) {
-      return NextResponse.json(
-        { error: "Job ID is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Job ID is required' }, { status: 400 });
     }
 
     // In a real implementation, you would:
@@ -188,17 +178,17 @@ export async function DELETE(request: NextRequest) {
       success: true,
       data: {
         jobId,
-        message: "Job cancelled and removed from processing queue",
+        message: 'Job cancelled and removed from processing queue',
       },
     });
   } catch (error) {
-    console.error("Cancel job error:", error);
+    console.error('Cancel job error:', error);
     return NextResponse.json(
       {
-        error: "Failed to cancel job",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to cancel job',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

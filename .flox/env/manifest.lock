@@ -1,0 +1,940 @@
+{
+  "lockfile-version": 1,
+  "manifest": {
+    "schema-version": "1.18.0",
+    "install": {
+      "awscli": {
+        "pkg-path": "awscli2"
+      },
+      "bun": {
+        "pkg-path": "bun",
+        "version": "1.3.11"
+      },
+      "ffmpeg": {
+        "pkg-path": "ffmpeg"
+      },
+      "nodejs": {
+        "pkg-path": "nodejs_24"
+      },
+      "pre-commit": {
+        "pkg-path": "pre-commit"
+      },
+      "shellcheck": {
+        "pkg-path": "shellcheck"
+      },
+      "terraform": {
+        "pkg-path": "terraform"
+      }
+    },
+    "hook": {
+      "on-activate": "  cd \"$FLOX_ENV_PROJECT\"\n"
+    },
+    "options": {
+      "systems": [
+        "aarch64-darwin",
+        "x86_64-darwin",
+        "aarch64-linux",
+        "x86_64-linux"
+      ]
+    },
+    "services": {
+      "web": {
+        "command": "bun run dev"
+      },
+      "worker": {
+        "command": "bun run worker"
+      }
+    }
+  },
+  "packages": [
+    {
+      "attr_path": "awscli2",
+      "broken": false,
+      "derivation": "/nix/store/a8vh2vmz4c0qhy8kf5acy7sbfpjyx6af-awscli2-2.34.24.drv",
+      "description": "Unified tool to manage your AWS services",
+      "install_id": "awscli",
+      "license": "Apache-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "awscli2-2.34.24",
+      "pname": "awscli2",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:10:22.073052Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "2.34.24",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "dist": "/nix/store/0nrql1b3pq91qydg6bbkm5igb0klczyk-awscli2-2.34.24-dist",
+        "out": "/nix/store/6rjb80bzlnq2aiyn7y44bxf98ms8jiv8-awscli2-2.34.24"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "awscli2",
+      "broken": false,
+      "derivation": "/nix/store/hwy9dlb6bjv1xxajvnqwcaqa5q6am739-awscli2-2.34.24.drv",
+      "description": "Unified tool to manage your AWS services",
+      "install_id": "awscli",
+      "license": "Apache-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "awscli2-2.34.24",
+      "pname": "awscli2",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:44:33.512542Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "2.34.24",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "dist": "/nix/store/d979xiddsvgbwnlsmpy557dv1bix365z-awscli2-2.34.24-dist",
+        "out": "/nix/store/y48ygqd28j468i7abfh9v5yy1rvj6qc2-awscli2-2.34.24"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "awscli2",
+      "broken": false,
+      "derivation": "/nix/store/ykk16xyirdz0rj4p7k16mb6sbpn3bn58-awscli2-2.34.24.drv",
+      "description": "Unified tool to manage your AWS services",
+      "install_id": "awscli",
+      "license": "Apache-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "awscli2-2.34.24",
+      "pname": "awscli2",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:15:55.060250Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "2.34.24",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "dist": "/nix/store/3qvvimmyvmcxrjncxyk1ihp3f5wi9pdn-awscli2-2.34.24-dist",
+        "out": "/nix/store/8jfgy4rp00vdvbr344w6bcp9s7hl6kkx-awscli2-2.34.24"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "awscli2",
+      "broken": false,
+      "derivation": "/nix/store/s59mbwm3gcil62mvsx9dyirlf27gpxqa-awscli2-2.34.24.drv",
+      "description": "Unified tool to manage your AWS services",
+      "install_id": "awscli",
+      "license": "Apache-2.0",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "awscli2-2.34.24",
+      "pname": "awscli2",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:52:10.717149Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "2.34.24",
+      "outputs_to_install": [
+        "out",
+        "out",
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "dist": "/nix/store/97src0rsmbl5wfp9jnb4bdrjbcic6dbp-awscli2-2.34.24-dist",
+        "out": "/nix/store/yfcx11pxh5ax692vvhpxmqc12dpq56f5-awscli2-2.34.24"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "bun",
+      "broken": false,
+      "derivation": "/nix/store/8zrfyrmbrnrbzfbzxafwh6jzmqdbd26f-bun-1.3.11.drv",
+      "description": "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one",
+      "install_id": "bun",
+      "license": "[ MIT, LGPL-2.1-only ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "bun-1.3.11",
+      "pname": "bun",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:10:22.181938Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.3.11",
+      "outputs_to_install": [
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/39953pz9sm4xclds7l90wjkig6hkbx5w-bun-1.3.11"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "bun",
+      "broken": false,
+      "derivation": "/nix/store/n3v4q8v2prxz1j33qnbxi22gz5hwp7bj-bun-1.3.11.drv",
+      "description": "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one",
+      "install_id": "bun",
+      "license": "[ MIT, LGPL-2.1-only ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "bun-1.3.11",
+      "pname": "bun",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:44:33.670758Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.3.11",
+      "outputs_to_install": [
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/csw87c9ada3vfqfnbknapi5ji4v5f3dh-bun-1.3.11"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "bun",
+      "broken": false,
+      "derivation": "/nix/store/cgbwarm521dph660q86a77ivjxpc3n0z-bun-1.3.11.drv",
+      "description": "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one",
+      "install_id": "bun",
+      "license": "[ MIT, LGPL-2.1-only ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "bun-1.3.11",
+      "pname": "bun",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:15:55.167220Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.3.11",
+      "outputs_to_install": [
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/3nv2mibvqqrk5z7gl7kx5zz7fdy0n5rq-bun-1.3.11"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "bun",
+      "broken": false,
+      "derivation": "/nix/store/7ly432fhz0kdgnibi4snz0vd7nysnlzy-bun-1.3.11.drv",
+      "description": "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one",
+      "install_id": "bun",
+      "license": "[ MIT, LGPL-2.1-only ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "bun-1.3.11",
+      "pname": "bun",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:52:10.884291Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "1.3.11",
+      "outputs_to_install": [
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/vmhlm86h4c9gxzrczqd91hwfz2kkfn25-bun-1.3.11"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "ffmpeg",
+      "broken": false,
+      "derivation": "/nix/store/82kss9qfl1syy42f31fdhiys83nj5v2l-ffmpeg-8.0.1.drv",
+      "description": "Complete, cross-platform solution to record, convert and stream audio and video",
+      "install_id": "ffmpeg",
+      "license": "[ LGPL-2.1-or-later, GPL-2.0-or-later, LGPL-3.0-or-later, GPL-3.0-or-later ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "ffmpeg-8.0.1",
+      "pname": "ffmpeg",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:10:23.009115Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "8.0.1",
+      "outputs_to_install": [
+        "bin",
+        "bin",
+        "man"
+      ],
+      "outputs": {
+        "bin": "/nix/store/h6fbp9mf3asvqqrpfa76259nyxsk3wi4-ffmpeg-8.0.1-bin",
+        "data": "/nix/store/59jc9i19x0pggr30r80caxv9hlfwfmmm-ffmpeg-8.0.1-data",
+        "dev": "/nix/store/5rw0vz79g0k10innml94a6cahk0zdq0c-ffmpeg-8.0.1-dev",
+        "doc": "/nix/store/08j6rfcgjxb4n6yw7cc2viggdm5hrb23-ffmpeg-8.0.1-doc",
+        "lib": "/nix/store/xwrdkxphjw7dcvijz7hmjshgdh00pb8y-ffmpeg-8.0.1-lib",
+        "man": "/nix/store/hgc8k86j30cxdmpad937kw6p1fnfh418-ffmpeg-8.0.1-man",
+        "out": "/nix/store/7x8affiw23mjygfdxp1h00rg5j9k1cpk-ffmpeg-8.0.1"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "ffmpeg",
+      "broken": false,
+      "derivation": "/nix/store/52lzfnqi7kanpiva9ac0g6i4ly2b2221-ffmpeg-8.0.1.drv",
+      "description": "Complete, cross-platform solution to record, convert and stream audio and video",
+      "install_id": "ffmpeg",
+      "license": "[ LGPL-2.1-or-later, GPL-2.0-or-later, LGPL-3.0-or-later, GPL-3.0-or-later ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "ffmpeg-8.0.1",
+      "pname": "ffmpeg",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:44:34.892933Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "8.0.1",
+      "outputs_to_install": [
+        "bin",
+        "bin",
+        "man"
+      ],
+      "outputs": {
+        "bin": "/nix/store/gg5fq58jr9scw9f0k0n29gwz82xjqwcn-ffmpeg-8.0.1-bin",
+        "data": "/nix/store/sf329hswmdr00kgbmxlq0jwisnfp9kj4-ffmpeg-8.0.1-data",
+        "dev": "/nix/store/vfw6xffwgs4lg607hskbl53krwmqy0mn-ffmpeg-8.0.1-dev",
+        "doc": "/nix/store/lm0h9yll1fgaic68m2aqicqpd17vxk6w-ffmpeg-8.0.1-doc",
+        "lib": "/nix/store/dr8zxnra7jpnz92d41282s4i51rqsqgf-ffmpeg-8.0.1-lib",
+        "man": "/nix/store/xz033zsph4csl2c0ks6x06rzyk9qzlry-ffmpeg-8.0.1-man",
+        "out": "/nix/store/hmy40l2dy0hx3vfljb44srl5lfykg2l6-ffmpeg-8.0.1"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "ffmpeg",
+      "broken": false,
+      "derivation": "/nix/store/sajb5j3k5g3bszkxnw69pd85fskh7fja-ffmpeg-8.0.1.drv",
+      "description": "Complete, cross-platform solution to record, convert and stream audio and video",
+      "install_id": "ffmpeg",
+      "license": "[ LGPL-2.1-or-later, GPL-2.0-or-later, LGPL-3.0-or-later, GPL-3.0-or-later ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "ffmpeg-8.0.1",
+      "pname": "ffmpeg",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:15:55.942936Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "8.0.1",
+      "outputs_to_install": [
+        "bin",
+        "bin",
+        "man"
+      ],
+      "outputs": {
+        "bin": "/nix/store/jzf5nkzr21p13gbim6xhm17fs2cibhd6-ffmpeg-8.0.1-bin",
+        "data": "/nix/store/ji5fnjviz7d0w281015z6w4wlp7hn3qj-ffmpeg-8.0.1-data",
+        "dev": "/nix/store/4ldbi1idfy5w4x9vqydjs7xr8d5imy39-ffmpeg-8.0.1-dev",
+        "doc": "/nix/store/97q6hqzlyc2gfr02amnjh9gx5jxp2f83-ffmpeg-8.0.1-doc",
+        "lib": "/nix/store/670zzi96flss4x3f8d4hpik9ydz61kiz-ffmpeg-8.0.1-lib",
+        "man": "/nix/store/6lrs6d13m2ab8xw7rkpqqisqp6vqnnaj-ffmpeg-8.0.1-man",
+        "out": "/nix/store/bpfx18fi8blpfg1r60vci24j9zis4fhy-ffmpeg-8.0.1"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "ffmpeg",
+      "broken": false,
+      "derivation": "/nix/store/iy237hllm88g096kwv2sqxrlyqx4pdak-ffmpeg-8.0.1.drv",
+      "description": "Complete, cross-platform solution to record, convert and stream audio and video",
+      "install_id": "ffmpeg",
+      "license": "[ LGPL-2.1-or-later, GPL-2.0-or-later, LGPL-3.0-or-later, GPL-3.0-or-later ]",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "ffmpeg-8.0.1",
+      "pname": "ffmpeg",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:52:12.165605Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "8.0.1",
+      "outputs_to_install": [
+        "bin",
+        "bin",
+        "man"
+      ],
+      "outputs": {
+        "bin": "/nix/store/nih4c7knfj2mgjz6jp5l0fqn86xdwmhc-ffmpeg-8.0.1-bin",
+        "data": "/nix/store/5q7nx3scq02s4wnjg028i9iv77ihqjz5-ffmpeg-8.0.1-data",
+        "dev": "/nix/store/28zawmnigadf607pbhmd3l775gafaf98-ffmpeg-8.0.1-dev",
+        "doc": "/nix/store/9ld21n4la75hpd4jijxdrl2cjmv5fjcm-ffmpeg-8.0.1-doc",
+        "lib": "/nix/store/c3q3hnqsp4b0l7fjx4q6ns4idw9pn6kv-ffmpeg-8.0.1-lib",
+        "man": "/nix/store/x5pnf13md9xa4841ckdp9p0n192rlbwn-ffmpeg-8.0.1-man",
+        "out": "/nix/store/26mpi27i6pj69dpk33fq61yhh46qi2id-ffmpeg-8.0.1"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "nodejs_24",
+      "broken": false,
+      "derivation": "/nix/store/1m7745r13n7wk43fzx5yr3jjr3vdc1db-nodejs-24.14.1.drv",
+      "description": "Event-driven I/O framework for the V8 JavaScript engine",
+      "install_id": "nodejs",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "nodejs-24.14.1",
+      "pname": "nodejs_24",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:10:46.948511Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "24.14.1",
+      "outputs_to_install": [
+        "out",
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/sf85v1qd1glkmsyfxwn9p8wridb4qf6y-nodejs-24.14.1"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "nodejs_24",
+      "broken": false,
+      "derivation": "/nix/store/3h5ymdg61db3f9xwhwclj05afipbxiq2-nodejs-24.14.1.drv",
+      "description": "Event-driven I/O framework for the V8 JavaScript engine",
+      "install_id": "nodejs",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "nodejs-24.14.1",
+      "pname": "nodejs_24",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:45:12.090351Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "24.14.1",
+      "outputs_to_install": [
+        "out",
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/amh21igq2gjg6ai42f3ksan8fh89qvpm-nodejs-24.14.1"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "nodejs_24",
+      "broken": false,
+      "derivation": "/nix/store/aarkp2y0aj12skgji58mbf5va0dcf9bd-nodejs-24.14.1.drv",
+      "description": "Event-driven I/O framework for the V8 JavaScript engine",
+      "install_id": "nodejs",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "nodejs-24.14.1",
+      "pname": "nodejs_24",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:16:20.086256Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "24.14.1",
+      "outputs_to_install": [
+        "out",
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/w9axwcpzxv1cd78d6v748az2j08k6vfw-nodejs-24.14.1"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "nodejs_24",
+      "broken": false,
+      "derivation": "/nix/store/8l6p07vmrcj7lsry0jz2ayp1rmpyjdai-nodejs-24.14.1.drv",
+      "description": "Event-driven I/O framework for the V8 JavaScript engine",
+      "install_id": "nodejs",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "nodejs-24.14.1",
+      "pname": "nodejs_24",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:52:51.744258Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "24.14.1",
+      "outputs_to_install": [
+        "out",
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/785jidgnryzj566s25s3rb262d4g5znb-nodejs-24.14.1"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "pre-commit",
+      "broken": false,
+      "derivation": "/nix/store/1gvq5iv00bngmjwf4h0lnmm7yda59qx5-pre-commit-4.5.1.drv",
+      "description": "Framework for managing and maintaining multi-language pre-commit hooks",
+      "install_id": "pre-commit",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "pre-commit-4.5.1",
+      "pname": "pre-commit",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:11:02.636001Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "4.5.1",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "dist": "/nix/store/7pdawwcg9rzbq2jx9arjqjzfc2d2pazi-pre-commit-4.5.1-dist",
+        "out": "/nix/store/l3ax81g9vp3p25js3g3172mzls4jps5s-pre-commit-4.5.1"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "pre-commit",
+      "broken": false,
+      "derivation": "/nix/store/fwj8iiczzgs08h38rx6vkbk7rf4d25wm-pre-commit-4.5.1.drv",
+      "description": "Framework for managing and maintaining multi-language pre-commit hooks",
+      "install_id": "pre-commit",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "pre-commit-4.5.1",
+      "pname": "pre-commit",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:45:32.903835Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "4.5.1",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "dist": "/nix/store/xjd6m024kf57vzdgnjc509amwl6jxign-pre-commit-4.5.1-dist",
+        "out": "/nix/store/c6ldspwziqspm73x0bjvk7bki187qr14-pre-commit-4.5.1"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "pre-commit",
+      "broken": false,
+      "derivation": "/nix/store/3fmqnb7mpbnzaarrwhqyvpdilicrj67i-pre-commit-4.5.1.drv",
+      "description": "Framework for managing and maintaining multi-language pre-commit hooks",
+      "install_id": "pre-commit",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "pre-commit-4.5.1",
+      "pname": "pre-commit",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:16:35.275277Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "4.5.1",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "dist": "/nix/store/nd0xxl9z0vl76qdrw0n2mdb3f43zqfwn-pre-commit-4.5.1-dist",
+        "out": "/nix/store/0lngxg5mlvwyavm6h44s1w7f22g5svl1-pre-commit-4.5.1"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "pre-commit",
+      "broken": false,
+      "derivation": "/nix/store/q6lxl7rc6s96gn597ynr84fjhil507s0-pre-commit-4.5.1.drv",
+      "description": "Framework for managing and maintaining multi-language pre-commit hooks",
+      "install_id": "pre-commit",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "pre-commit-4.5.1",
+      "pname": "pre-commit",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:53:13.718121Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "4.5.1",
+      "outputs_to_install": [
+        "out",
+        "out",
+        "out"
+      ],
+      "outputs": {
+        "dist": "/nix/store/flm3yk5mzhrnl6rbc0smja2sfca7g3zn-pre-commit-4.5.1-dist",
+        "out": "/nix/store/s5q5ayvqxv908x166b03sfrfd114ls20-pre-commit-4.5.1"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "shellcheck",
+      "broken": false,
+      "derivation": "/nix/store/wb6bfc7h1bz04hwz47m8mrmd3zrmwxlk-shellcheck-0.11.0.drv",
+      "description": "Shell script analysis tool",
+      "install_id": "shellcheck",
+      "license": "GPL-3.0-only",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "shellcheck-0.11.0",
+      "pname": "shellcheck",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:12:17.535101Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.11.0",
+      "outputs_to_install": [
+        "bin",
+        "doc",
+        "man"
+      ],
+      "outputs": {
+        "bin": "/nix/store/dlbqbwjzrv193wnjg04cpr5giw8hn12l-shellcheck-0.11.0-bin",
+        "doc": "/nix/store/y23x33gxn2dlxf0v3d03sk8hhwprqkwr-shellcheck-0.11.0-doc",
+        "man": "/nix/store/wp7s0lsrhwz0ix6lza75fch0cpl88py8-shellcheck-0.11.0-man",
+        "out": "/nix/store/1vr1pp6r6cszwcvbnx6jnm5m2acj6b72-shellcheck-0.11.0"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "shellcheck",
+      "broken": false,
+      "derivation": "/nix/store/6qdgnvzffzjmmrnc5bf1j7c9r4fwg4hk-shellcheck-0.11.0.drv",
+      "description": "Shell script analysis tool",
+      "install_id": "shellcheck",
+      "license": "GPL-3.0-only",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "shellcheck-0.11.0",
+      "pname": "shellcheck",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:46:56.815166Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.11.0",
+      "outputs_to_install": [
+        "bin",
+        "doc",
+        "man"
+      ],
+      "outputs": {
+        "bin": "/nix/store/sw3f95zvc4kj318bkkvya0bha59c959r-shellcheck-0.11.0-bin",
+        "doc": "/nix/store/afnjnclxa4f20n4h5j655q6bkvqb5gfx-shellcheck-0.11.0-doc",
+        "man": "/nix/store/xsxan945pnxvw3zs8sgnyyshl2yc0f1m-shellcheck-0.11.0-man",
+        "out": "/nix/store/s8j83wf8g18gs8liayqdxbw6byfxrmq3-shellcheck-0.11.0"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "shellcheck",
+      "broken": false,
+      "derivation": "/nix/store/4lf3adwzj6m3pp2h739kqkfm3sa59rnd-shellcheck-0.11.0.drv",
+      "description": "Shell script analysis tool",
+      "install_id": "shellcheck",
+      "license": "GPL-3.0-only",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "shellcheck-0.11.0",
+      "pname": "shellcheck",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:17:42.962741Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.11.0",
+      "outputs_to_install": [
+        "bin",
+        "doc",
+        "man"
+      ],
+      "outputs": {
+        "bin": "/nix/store/v9vqlrcqfv6cjr4s92d5rfdvll2na6a7-shellcheck-0.11.0-bin",
+        "doc": "/nix/store/s4vm25qahll7w881151z12vn81j4afg0-shellcheck-0.11.0-doc",
+        "man": "/nix/store/32p1vmfw91d0sqsfnbxx52yf8r2brdq2-shellcheck-0.11.0-man",
+        "out": "/nix/store/hkbyrgg9yygb7m05r1vpx1b9cn6hh8rf-shellcheck-0.11.0"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "shellcheck",
+      "broken": false,
+      "derivation": "/nix/store/4mn0nhhr5xpdy6qd3fpd8c0xrwamibp9-shellcheck-0.11.0.drv",
+      "description": "Shell script analysis tool",
+      "install_id": "shellcheck",
+      "license": "GPL-3.0-only",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "shellcheck-0.11.0",
+      "pname": "shellcheck",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:54:40.772754Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "0.11.0",
+      "outputs_to_install": [
+        "bin",
+        "doc",
+        "man"
+      ],
+      "outputs": {
+        "bin": "/nix/store/7xiiq153kv13wcqb6j5zffz2g778nssv-shellcheck-0.11.0-bin",
+        "doc": "/nix/store/x77g5cjb4mzab1vr48bv3vl67p7lcy2n-shellcheck-0.11.0-doc",
+        "man": "/nix/store/00zjsxq0s6j95n6004prcjxn4j5zgpb9-shellcheck-0.11.0-man",
+        "out": "/nix/store/09hk83dw55dpbw1f8km58pycmbfr186k-shellcheck-0.11.0"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "terraform",
+      "broken": false,
+      "derivation": "/nix/store/ib1j53hd4ry07lx6fmzfgb0hifjqgjv3-terraform-1.15.0.drv",
+      "description": "Tool for building, changing, and versioning infrastructure",
+      "install_id": "terraform",
+      "license": "BUSL-1.1",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "terraform-1.15.0",
+      "pname": "terraform",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:12:21.729693Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": true,
+      "version": "1.15.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/7r9ds9iw4ryaphd20z7gz9hpxk867k1z-terraform-1.15.0"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "terraform",
+      "broken": false,
+      "derivation": "/nix/store/qwrxgi7hp4m42ix9qdw3gv5jknc4p96l-terraform-1.15.0.drv",
+      "description": "Tool for building, changing, and versioning infrastructure",
+      "install_id": "terraform",
+      "license": "BUSL-1.1",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "terraform-1.15.0",
+      "pname": "terraform",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T08:47:03.342257Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": true,
+      "version": "1.15.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/adbi3x2sln04rch0rzrnyhbv7dwrh96i-terraform-1.15.0"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "terraform",
+      "broken": false,
+      "derivation": "/nix/store/34gfr9jzyxyl95w1msjpb64jsimkdb26-terraform-1.15.0.drv",
+      "description": "Tool for building, changing, and versioning infrastructure",
+      "install_id": "terraform",
+      "license": "BUSL-1.1",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "terraform-1.15.0",
+      "pname": "terraform",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:17:47.081046Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": true,
+      "version": "1.15.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/kq1z18q1fpbmlqpqmkgf4pd1mby36zfi-terraform-1.15.0"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "terraform",
+      "broken": false,
+      "derivation": "/nix/store/pkcga0yvchnh32l7dmgvmj94lcik490s-terraform-1.15.0.drv",
+      "description": "Tool for building, changing, and versioning infrastructure",
+      "install_id": "terraform",
+      "license": "BUSL-1.1",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "name": "terraform-1.15.0",
+      "pname": "terraform",
+      "rev": "15f4ee454b1dce334612fa6843b3e05cf546efab",
+      "rev_count": 990025,
+      "rev_date": "2026-04-30T19:45:37Z",
+      "scrape_date": "2026-05-03T09:54:47.609874Z",
+      "stabilities": [
+        "unstable"
+      ],
+      "unfree": true,
+      "version": "1.15.0",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/avr3pj8c8anilsx840kxpr7l4sjf85vd-terraform-1.15.0"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    }
+  ]
+}

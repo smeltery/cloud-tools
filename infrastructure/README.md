@@ -4,7 +4,7 @@ This directory contains the complete Terraform infrastructure configuration for 
 
 ## 📁 Project Structure
 
-```
+```text
 terraform/
 ├── README.md                    # This file - main documentation
 ├── main.tf                      # Main Terraform configuration
@@ -84,7 +84,7 @@ graph TB
 
 1. **AWS CLI** configured with appropriate credentials
 2. **Terraform** >= 1.0 installed
-3. **Appropriate AWS permissions** (see [Permissions](#permissions) section)
+3. **Appropriate AWS permissions** (see [Permissions](#iam-permissions) section)
 
 ### 1. Setup Backend Storage (One-time setup)
 
@@ -369,9 +369,11 @@ The `scripts/deploy.sh` script provides convenient deployment automation:
    **Solution**: Ensure your AWS credentials have the required permissions
 
 4. **Lambda ARN format issues**
+
    ```bash
    Error: Invalid function name
    ```
+
    **Solution**: Check that the Lambda ARN format is correct in API Gateway integration
 
 ### Debug Mode

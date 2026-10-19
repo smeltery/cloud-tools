@@ -1,0 +1,16 @@
+{
+  "file": 300,
+  "total": 21199,
+  "legacy": {
+    "client/components/conversion-history.tsx": 376,
+    "client/components/file-uploader.tsx": 325,
+    "client/components/status-dashboard.tsx": 600,
+    "client/test/app/api/jobs/route.test.ts": 353,
+    "client/test/app/api/process/route.test.ts": 350,
+    "client/test/lib/worker.test.ts": 779,
+    "infrastructure/modules/api-gateway/main.tf": 473,
+    "infrastructure/modules/s3/main.tf": 551,
+    "lib/aws-config.ts": 485,
+    "lib/worker.ts": 2196
+  }
+}

@@ -1,0 +1,234 @@
+.editorial-section {
+  padding-block: 70px;
+  border-top: 1px solid var(--line);
+}
+.editorial-section h2,
+.next-step h2 {
+  font-size: clamp(28px, 3.2vw, 42px);
+  line-height: 1.15;
+  font-weight: 550;
+  margin: 16px 0 22px;
+}
+.editorial-section h3,
+.guide-grid h3 {
+  font-size: 21px;
+  font-weight: 550;
+  line-height: 1.3;
+}
+.editorial-section p:not(.eyebrow),
+.guide-grid p,
+.next-step p:not(.eyebrow) {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--quiet);
+}
+.task-grid,
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+.task-card {
+  padding: 12px 12px 26px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: white;
+}
+.task-sample {
+  background: var(--wash);
+  border-radius: 12px;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  color: #235c94;
+  font:
+    14px ui-monospace,
+    monospace;
+}
+.task-card h3,
+.task-card p,
+.task-card > a {
+  margin: 22px 14px 0;
+}
+.task-card > a {
+  display: inline-block;
+}
+.task-card p {
+  min-height: 76px;
+}
+.confidence-section,
+.faq-section {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 80px;
+}
+.confidence-section > div > p:not(.eyebrow) {
+  max-width: 400px;
+  margin-bottom: 24px;
+}
+.principle-list > div {
+  display: flex;
+  gap: 20px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+}
+.principle-list > div:first-child {
+  padding-top: 0;
+}
+.principle-list svg {
+  flex-shrink: 0;
+  color: var(--blue);
+  margin-top: 4px;
+}
+.principle-list p {
+  margin-top: 10px;
+}
+.questions details {
+  border-bottom: 1px solid var(--line);
+}
+.questions summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 22px 0;
+  font-size: 16px;
+  cursor: pointer;
+  list-style: none;
+}
+.questions summary::-webkit-details-marker {
+  display: none;
+}
+.questions summary span {
+  font-size: 22px;
+  color: var(--blue);
+  transition: transform 0.2s;
+}
+.questions details[open] summary span {
+  transform: rotate(45deg);
+}
+.questions details p {
+  padding-bottom: 22px;
+  max-width: 560px;
+}
+.next-step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 48px;
+  margin-block: 20px 80px;
+  border: 1px solid #c4dbf1;
+  border-radius: 24px;
+  background: var(--wash);
+}
+.next-step h2 {
+  margin-block: 14px;
+}
+.next-step p {
+  max-width: 520px;
+}
+.next-step-actions {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.editorial-hero {
+  padding-block: 80px 60px;
+  max-width: 850px;
+}
+.editorial-hero h1 {
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1.08;
+  font-weight: 550;
+  margin: 24px 0;
+  text-wrap: balance;
+}
+.editorial-hero > p:not(.eyebrow) {
+  max-width: 650px;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--quiet);
+}
+.category-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 34px;
+}
+.category-tabs a {
+  padding: 12px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 13px;
+}
+.category-tabs a[aria-current] {
+  background: var(--ink);
+  color: white;
+  border-color: var(--ink);
+}
+.category-tabs span {
+  opacity: 0.8;
+  font-size: 10px;
+  margin-left: 12px;
+}
+.catalog-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.catalog-page > section:first-of-type {
+  padding-bottom: 64px;
+}
+.guide-grid article {
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+.guide-grid h3 {
+  margin-block: 16px;
+}
+.guide-grid p {
+  margin-bottom: 20px;
+}
+@media (max-width: 900px) {
+  .task-grid {
+    gap: 14px;
+  }
+  .confidence-section,
+  .faq-section {
+    gap: 36px;
+  }
+  .next-step {
+    padding: 32px;
+  }
+}
+@media (max-width: 700px) {
+  .editorial-section {
+    padding-block: 44px;
+  }
+  .editorial-hero {
+    padding-block: 50px 40px;
+  }
+  .task-grid,
+  .guide-grid,
+  .confidence-section,
+  .faq-section,
+  .catalog-grid {
+    grid-template-columns: 1fr;
+  }
+  .task-card p {
+    min-height: 0;
+  }
+  .next-step {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 28px;
+    margin-bottom: 48px;
+    gap: 26px;
+  }
+  .next-step-actions {
+    align-items: flex-start;
+  }
+}

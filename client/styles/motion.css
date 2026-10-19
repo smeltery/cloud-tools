@@ -1,0 +1,64 @@
+@keyframes page-arrive {
+  from {
+    transform: translateY(8px);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes gentle-reveal {
+  from {
+    transform: translateY(14px);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .page-enter {
+    animation: page-arrive 0.32s ease-out both;
+  }
+  .primary-link,
+  .category-tabs a,
+  .next-step,
+  .task-card,
+  .guide-grid a {
+    transition:
+      background 0.2s,
+      color 0.2s,
+      border-color 0.2s,
+      box-shadow 0.2s,
+      transform 0.2s;
+  }
+  .primary-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px #172b4315;
+  }
+  .primary-link:active {
+    transform: translateY(0);
+  }
+  .task-card:hover {
+    border-color: #9cbfdf;
+    transform: translateY(-3px);
+  }
+  .search-dialog[open] {
+    animation: page-arrive 0.2s ease-out;
+  }
+  .status-refreshing {
+    animation: turn 1s linear infinite;
+  }
+  @supports (animation-timeline: view()) {
+    .editorial-section,
+    .next-step,
+    .brand-page > section {
+      animation: gentle-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 22%;
+    }
+  }
+}

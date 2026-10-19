@@ -1,27 +1,24 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
     // Check LocalStack connectivity
-    let localStackStatus = "unknown";
+    let localStackStatus = 'unknown';
     let localStackServices = {};
 
     try {
-      const localStackResponse = await fetch(
-        "http://localhost:4566/_localstack/health",
-        {
-          signal: AbortSignal.timeout(3000),
-        },
-      );
+      const localStackResponse = await fetch('http://localhost:4566/_localstack/health', {
+        signal: AbortSignal.timeout(3000),
+      });
       if (localStackResponse.ok) {
         const health = await localStackResponse.json();
         localStackServices = health.services;
-        localStackStatus = "connected";
+        localStackStatus = 'connected';
       } else {
-        localStackStatus = "unreachable";
+        localStackStatus = 'unreachable';
       }
     } catch {
-      localStackStatus = "down";
+      localStackStatus = 'down';
     }
 
     // Calculate uptime in a more readable format
@@ -30,19 +27,19 @@ export async function GET() {
     const uptimeHours = Math.floor((uptimeSeconds % 86400) / 3600);
     const uptimeMins = Math.floor((uptimeSeconds % 3600) / 60);
 
-    let uptimeString = "";
+    let uptimeString = '';
     if (uptimeDays > 0) uptimeString += `${uptimeDays}d `;
     if (uptimeHours > 0) uptimeString += `${uptimeHours}h `;
     uptimeString += `${uptimeMins}m`;
 
     const memUsage = process.memoryUsage();
     const healthStatus = {
-      status: "healthy",
+      status: 'healthy',
       timestamp: new Date().toISOString(),
-      version: "1.0.0",
-      environment: process.env.NODE_ENV || "development",
+      version: '1.0.0',
+      environment: process.env.NODE_ENV || 'development',
       services: {
-        api: "operational",
+        api: 'operational',
         localstack: localStackStatus,
         ...localStackServices,
       },
@@ -71,11 +68,11 @@ export async function GET() {
   } catch (error) {
     return NextResponse.json(
       {
-        status: "unhealthy",
+        status: 'unhealthy',
         timestamp: new Date().toISOString(),
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 503 },
+      { status: 503 }
     );
   }
 }
@@ -85,9 +82,9 @@ export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type",
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
     },
   });
 }

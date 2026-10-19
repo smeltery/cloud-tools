@@ -1,0 +1,63 @@
+import { Image, Music, Video, BookOpen, Minimize2, FileText } from 'lucide-react';
+export const tools = [
+  {
+    title: 'Image converter',
+    href: '/tools/converters/image',
+    icon: Image,
+    description: 'Give your images a new format.',
+    formats: 'JPG · PNG · WebP · GIF',
+    category: 'Convert',
+  },
+  {
+    title: 'Audio converter',
+    href: '/tools/converters/audio',
+    icon: Music,
+    description: 'The right format for every listening moment.',
+    formats: 'MP3 · WAV · OGG · FLAC',
+    category: 'Convert',
+  },
+  {
+    title: 'Video converter',
+    href: '/tools/converters/video',
+    icon: Video,
+    description: 'Make your video fit its next destination.',
+    formats: 'MP4 · MOV · AVI · WebM',
+    category: 'Convert',
+  },
+  {
+    title: 'eBook converter',
+    href: '/tools/converters/ebooks',
+    icon: BookOpen,
+    description: 'Bring your reading to a different device.',
+    formats: 'EPUB · MOBI · AZW3',
+    category: 'Convert',
+  },
+  {
+    title: 'Image compression',
+    href: '/tools/compression/image',
+    icon: Minimize2,
+    description: 'Less weight for the images you share.',
+    formats: 'Powered by Sharp',
+    category: 'Compress',
+  },
+  {
+    title: 'PDF compression',
+    href: '/tools/compression/pdf',
+    icon: FileText,
+    description: 'Optimize document structure and metadata.',
+    formats: 'Powered by pdf-lib',
+    category: 'Compress',
+  },
+];
+export const guides = [
+  { slug: '', title: 'Overview', group: 'Start here', file: 'README' },
+  { slug: 'quick-start', title: 'Quick start', group: 'Start here', file: 'quick-start' },
+  { slug: 'conversion', title: 'Converting files', group: 'Guides', file: 'conversion' },
+  { slug: 'formats', title: 'Supported formats', group: 'Guides', file: 'formats' },
+  { slug: 'jobs', title: 'Jobs and downloads', group: 'Guides', file: 'jobs' },
+  { slug: 'troubleshooting', title: 'Troubleshooting', group: 'Guides', file: 'troubleshooting' },
+  { slug: 'api', title: 'API reference', group: 'Reference', file: 'api' },
+  { slug: 'architecture', title: 'Architecture', group: 'Reference', file: 'architecture' },
+  { slug: 'deployment', title: 'Self-hosting', group: 'Development', file: 'deployment' },
+  { slug: 'development', title: 'Contributing', group: 'Development', file: 'development' },
+];

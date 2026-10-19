@@ -5,9 +5,9 @@
  * we can safely use the existing @types/fluent-ffmpeg type definitions.
  */
 
-declare module "fluent-ffmpeg-7" {
+declare module 'fluent-ffmpeg-7' {
   // Import all types and interfaces from fluent-ffmpeg
-  import Ffmpeg from "fluent-ffmpeg";
+  import Ffmpeg from 'fluent-ffmpeg';
 
   // Re-export everything from fluent-ffmpeg
   export = Ffmpeg;

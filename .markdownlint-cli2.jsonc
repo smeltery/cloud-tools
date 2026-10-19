@@ -1,0 +1,24 @@
+{
+  "config": {
+    "default": true,
+    "MD013": false,
+    "MD033": false,
+    "MD041": false,
+    "MD024": {
+      "siblings_only": true,
+    },
+  },
+  "globs": [
+    "**/*.md",
+    "!node_modules",
+    "!**/node_modules/**",
+    "!.website-studio/**",
+    "!.flox/**",
+    "!**/.terraform/**",
+    "!**/.next/**",
+    "!**/coverage/**",
+    "!**/dist/**",
+    "!playwright-report/**",
+    "!test-results/**",
+  ],
+}

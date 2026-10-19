@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { GET, OPTIONS } from "@/app/api/health/route";
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { GET, OPTIONS } from '@/app/api/health/route';
 
 // Mock fetch globally
 const mockFetch = vi.fn();
@@ -15,9 +15,9 @@ const mockProcess = {
     external: 5 * 1024 * 1024,
     arrayBuffers: 2 * 1024 * 1024,
   })),
-  version: "v24.6.0",
-  platform: "darwin",
-  arch: "arm64",
+  version: 'v24.6.0',
+  platform: 'darwin',
+  arch: 'arm64',
 };
 
 // Store original process methods
@@ -26,7 +26,7 @@ const originalProcess = {
   memoryUsage: process.memoryUsage,
 };
 
-describe("/api/health", () => {
+describe('/api/health', () => {
   beforeEach(() => {
     mockFetch.mockClear();
     // Replace process methods with mocks
@@ -50,17 +50,17 @@ describe("/api/health", () => {
     process.memoryUsage = originalProcess.memoryUsage;
   });
 
-  describe("GET", () => {
-    it("should return healthy status with LocalStack connected", async () => {
+  describe('GET', () => {
+    it('should return healthy status with LocalStack connected', async () => {
       // Mock successful LocalStack health check
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () =>
           Promise.resolve({
             services: {
-              s3: "available",
-              dynamodb: "available",
-              sqs: "available",
+              s3: 'available',
+              dynamodb: 'available',
+              sqs: 'available',
             },
           }),
       });
@@ -70,19 +70,19 @@ describe("/api/health", () => {
 
       expect(response.status).toBe(200);
       expect(data).toMatchObject({
-        status: "healthy",
+        status: 'healthy',
         timestamp: expect.any(String),
-        version: "1.0.0",
-        environment: "test",
+        version: '1.0.0',
+        environment: 'test',
         services: {
-          api: "operational",
-          localstack: "connected",
-          s3: "available",
-          dynamodb: "available",
-          sqs: "available",
+          api: 'operational',
+          localstack: 'connected',
+          s3: 'available',
+          dynamodb: 'available',
+          sqs: 'available',
         },
         system: {
-          uptime: "1h 1m",
+          uptime: '1h 1m',
           uptimeSeconds: 3661,
           memory: {
             used: 30, // 30 MB
@@ -97,24 +97,24 @@ describe("/api/health", () => {
           },
         },
         localstack: {
-          status: "connected",
+          status: 'connected',
           services: {
-            s3: "available",
-            dynamodb: "available",
-            sqs: "available",
+            s3: 'available',
+            dynamodb: 'available',
+            sqs: 'available',
           },
         },
       });
 
       expect(mockFetch).toHaveBeenCalledWith(
-        "http://localhost:4566/_localstack/health",
+        'http://localhost:4566/_localstack/health',
         expect.objectContaining({
           signal: expect.any(AbortSignal),
-        }),
+        })
       );
     });
 
-    it("should return healthy status with LocalStack unreachable", async () => {
+    it('should return healthy status with LocalStack unreachable', async () => {
       // Mock LocalStack returning non-OK response
       mockFetch.mockResolvedValueOnce({
         ok: false,
@@ -126,48 +126,48 @@ describe("/api/health", () => {
 
       expect(response.status).toBe(200);
       expect(data).toMatchObject({
-        status: "healthy",
+        status: 'healthy',
         services: {
-          api: "operational",
-          localstack: "unreachable",
+          api: 'operational',
+          localstack: 'unreachable',
         },
         localstack: {
-          status: "unreachable",
+          status: 'unreachable',
           services: {},
         },
       });
     });
 
-    it("should return healthy status with LocalStack down", async () => {
+    it('should return healthy status with LocalStack down', async () => {
       // Mock LocalStack connection failure
-      mockFetch.mockRejectedValueOnce(new Error("Connection refused"));
+      mockFetch.mockRejectedValueOnce(new Error('Connection refused'));
 
       const response = await GET();
       const data = await response.json();
 
       expect(response.status).toBe(200);
       expect(data).toMatchObject({
-        status: "healthy",
+        status: 'healthy',
         services: {
-          api: "operational",
-          localstack: "down",
+          api: 'operational',
+          localstack: 'down',
         },
         localstack: {
-          status: "down",
+          status: 'down',
           services: {},
         },
       });
     });
 
-    it("should format uptime correctly for different durations", async () => {
+    it('should format uptime correctly for different durations', async () => {
       // Test different uptime scenarios
       const testCases = [
-        { uptime: 30, expected: "0m" },
-        { uptime: 120, expected: "2m" },
-        { uptime: 3600, expected: "1h 0m" },
-        { uptime: 3661, expected: "1h 1m" },
-        { uptime: 90061, expected: "1d 1h 1m" },
-        { uptime: 176461, expected: "2d 1h 1m" },
+        { uptime: 30, expected: '0m' },
+        { uptime: 120, expected: '2m' },
+        { uptime: 3600, expected: '1h 0m' },
+        { uptime: 3661, expected: '1h 1m' },
+        { uptime: 90061, expected: '1d 1h 1m' },
+        { uptime: 176461, expected: '2d 1h 1m' },
       ];
 
       mockFetch.mockResolvedValue({
@@ -186,7 +186,7 @@ describe("/api/health", () => {
       }
     });
 
-    it("should handle memory usage correctly", async () => {
+    it('should handle memory usage correctly', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({ services: {} }),
@@ -211,10 +211,10 @@ describe("/api/health", () => {
       });
     });
 
-    it("should handle unexpected errors during health check", async () => {
+    it('should handle unexpected errors during health check', async () => {
       // Mock a critical error that causes the entire function to fail
       mockProcess.uptime.mockImplementation(() => {
-        throw new Error("System error");
+        throw new Error('System error');
       });
 
       const response = await GET();
@@ -222,52 +222,48 @@ describe("/api/health", () => {
 
       expect(response.status).toBe(503);
       expect(data).toMatchObject({
-        status: "unhealthy",
+        status: 'unhealthy',
         timestamp: expect.any(String),
-        error: "System error",
+        error: 'System error',
       });
     });
 
-    it("should handle LocalStack timeout", async () => {
+    it('should handle LocalStack timeout', async () => {
       // Mock LocalStack timeout (AbortError)
-      const abortError = new Error("The operation was aborted");
-      abortError.name = "AbortError";
+      const abortError = new Error('The operation was aborted');
+      abortError.name = 'AbortError';
       mockFetch.mockRejectedValueOnce(abortError);
 
       const response = await GET();
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.localstack.status).toBe("down");
+      expect(data.localstack.status).toBe('down');
     });
 
-    it("should handle LocalStack invalid JSON response", async () => {
+    it('should handle LocalStack invalid JSON response', async () => {
       // Mock LocalStack returning invalid JSON
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.reject(new Error("Invalid JSON")),
+        json: () => Promise.reject(new Error('Invalid JSON')),
       });
 
       const response = await GET();
       const data = await response.json();
 
       expect(response.status).toBe(200);
-      expect(data.localstack.status).toBe("down");
+      expect(data.localstack.status).toBe('down');
     });
   });
 
-  describe("OPTIONS", () => {
-    it("should return CORS headers", async () => {
+  describe('OPTIONS', () => {
+    it('should return CORS headers', async () => {
       const response = await OPTIONS();
 
       expect(response.status).toBe(200);
-      expect(response.headers.get("Access-Control-Allow-Origin")).toBe("*");
-      expect(response.headers.get("Access-Control-Allow-Methods")).toBe(
-        "GET, OPTIONS",
-      );
-      expect(response.headers.get("Access-Control-Allow-Headers")).toBe(
-        "Content-Type",
-      );
+      expect(response.headers.get('Access-Control-Allow-Origin')).toBe('*');
+      expect(response.headers.get('Access-Control-Allow-Methods')).toBe('GET, OPTIONS');
+      expect(response.headers.get('Access-Control-Allow-Headers')).toBe('Content-Type');
     });
   });
 });

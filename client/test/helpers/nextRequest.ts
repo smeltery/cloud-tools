@@ -1,5 +1,5 @@
-import { vi } from "vitest";
-import { NextRequest } from "next/server";
+import { vi } from 'vitest';
+import { NextRequest } from 'next/server';
 
 /**
  * Create a mock NextRequest object for testing
@@ -10,9 +10,9 @@ export function createMockNextRequest(
     method?: string;
     body?: any;
     headers?: Record<string, string>;
-  } = {},
+  } = {}
 ): NextRequest {
-  const { method = "GET", body, headers = {} } = options;
+  const { method = 'GET', body, headers = {} } = options;
 
   // Create a mock request that satisfies NextRequest interface
   const parsedUrl = new URL(url);
@@ -23,11 +23,7 @@ export function createMockNextRequest(
     headers: new Headers(headers),
     body: body ? JSON.stringify(body) : null,
     json: vi.fn().mockResolvedValue(body || {}),
-    text: vi
-      .fn()
-      .mockResolvedValue(
-        typeof body === "string" ? body : JSON.stringify(body || ""),
-      ),
+    text: vi.fn().mockResolvedValue(typeof body === 'string' ? body : JSON.stringify(body || '')),
     formData: vi.fn().mockResolvedValue(new FormData()),
     arrayBuffer: vi.fn().mockResolvedValue(new ArrayBuffer(0)),
     blob: vi.fn().mockResolvedValue(new Blob()),
@@ -45,21 +41,21 @@ export function createMockNextRequest(
       [Symbol.iterator]: vi.fn().mockReturnValue([][Symbol.iterator]()),
     },
     geo: {
-      city: "Test City",
-      country: "US",
-      region: "CA",
+      city: 'Test City',
+      country: 'US',
+      region: 'CA',
     },
-    ip: "127.0.0.1",
-    referrer: "",
-    referrerPolicy: "" as const,
+    ip: '127.0.0.1',
+    referrer: '',
+    referrerPolicy: '' as const,
     bodyUsed: false,
-    cache: "default" as const,
-    credentials: "same-origin" as const,
-    destination: "" as const,
-    integrity: "",
+    cache: 'default' as const,
+    credentials: 'same-origin' as const,
+    destination: '' as const,
+    integrity: '',
     keepalive: false,
-    mode: "cors" as const,
-    redirect: "follow" as const,
+    mode: 'cors' as const,
+    redirect: 'follow' as const,
   };
 
   return request as unknown as NextRequest;
@@ -70,9 +66,9 @@ export function createMockNextRequest(
  */
 export function createMockGetRequest(
   url: string,
-  headers: Record<string, string> = {},
+  headers: Record<string, string> = {}
 ): NextRequest {
-  return createMockNextRequest(url, { method: "GET", headers });
+  return createMockNextRequest(url, { method: 'GET', headers });
 }
 
 /**
@@ -81,12 +77,12 @@ export function createMockGetRequest(
 export function createMockPostRequest(
   url: string,
   body: any,
-  headers: Record<string, string> = {},
+  headers: Record<string, string> = {}
 ): NextRequest {
   return createMockNextRequest(url, {
-    method: "POST",
+    method: 'POST',
     body,
-    headers: { "Content-Type": "application/json", ...headers },
+    headers: { 'Content-Type': 'application/json', ...headers },
   });
 }
 
@@ -96,12 +92,12 @@ export function createMockPostRequest(
 export function createMockPutRequest(
   url: string,
   body: any,
-  headers: Record<string, string> = {},
+  headers: Record<string, string> = {}
 ): NextRequest {
   return createMockNextRequest(url, {
-    method: "PUT",
+    method: 'PUT',
     body,
-    headers: { "Content-Type": "application/json", ...headers },
+    headers: { 'Content-Type': 'application/json', ...headers },
   });
 }
 
@@ -110,7 +106,7 @@ export function createMockPutRequest(
  */
 export function createMockDeleteRequest(
   url: string,
-  headers: Record<string, string> = {},
+  headers: Record<string, string> = {}
 ): NextRequest {
-  return createMockNextRequest(url, { method: "DELETE", headers });
+  return createMockNextRequest(url, { method: 'DELETE', headers });
 }

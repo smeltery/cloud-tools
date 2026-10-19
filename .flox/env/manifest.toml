@@ -1,0 +1,25 @@
+schema-version = "1.18.0"
+
+[install]
+bun.pkg-path = "bun"
+bun.version = "1.3.11"
+nodejs.pkg-path = "nodejs_24"
+terraform.pkg-path = "terraform"
+shellcheck.pkg-path = "shellcheck"
+pre-commit.pkg-path = "pre-commit"
+awscli.pkg-path = "awscli2"
+ffmpeg.pkg-path = "ffmpeg"
+
+[hook]
+on-activate = """
+  cd "$FLOX_ENV_PROJECT"
+"""
+
+[services.web]
+command = "bun run dev"
+
+[services.worker]
+command = "bun run worker"
+
+[options]
+systems = ["aarch64-darwin", "x86_64-darwin", "aarch64-linux", "x86_64-linux"]

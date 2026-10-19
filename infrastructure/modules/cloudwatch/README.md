@@ -156,19 +156,19 @@ module "cloudwatch_dev" {
 
 ### Lambda Function Monitoring
 
-**Error Rate Alarms**
+### Error Rate Alarms
 
 - Monitors Lambda function errors
 - Threshold: 5 errors within 2 evaluation periods (2 minutes)
 - Sends alerts to SNS topic when triggered
 
-**Duration Alarms**
+### Duration Alarms
 
 - Monitors Lambda execution time
 - Threshold: 30 seconds average duration
 - Helps identify performance issues
 
-**Log Groups**
+### Log Groups
 
 - Automatic log group creation for each Lambda function
 - Configurable retention periods (default: 14 days)
@@ -305,18 +305,18 @@ When updating this module:
 
 ### Common Issues
 
-**Log Groups Not Created**
+### Log Groups Not Created
 
 - Verify Lambda function names are correct
 - Check IAM permissions for CloudWatch Logs
 
-**Alarms Not Triggering**
+### Alarms Not Triggering
 
 - Verify Lambda functions are generating metrics
 - Check alarm threshold settings
 - Ensure SNS topic has valid subscriptions
 
-**Dashboard Not Loading**
+### Dashboard Not Loading
 
 - Verify resource names match actual AWS resources
 - Check CloudWatch dashboard permissions
