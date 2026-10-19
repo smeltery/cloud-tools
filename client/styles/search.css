@@ -108,6 +108,10 @@
   & [hidden] {
     display: none !important;
   }
+  & .result-icon {
+    flex-shrink: 0;
+    color: #386b9f;
+  }
   & .result-copy {
     flex: 1;
     min-width: 0;

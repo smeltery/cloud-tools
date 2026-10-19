@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Search, X } from 'lucide-react';
+import { Search, X, BookOpen, Palette, Info, FileClock, Activity } from 'lucide-react';
 import { tools, guides } from '@/lib/catalog';
 const entries = [
   ...tools.map(t => ({ ...t, kind: 'Tools' })),
@@ -10,27 +10,32 @@ const entries = [
     href: `/docs/${g.slug}`,
     description: `${g.group} · ${g.title} for Cloud Tools.`,
     kind: 'Guides',
+    icon: BookOpen,
   })),
   {
     title: 'Brand & assets',
+    icon: Palette,
     href: '/brand',
     description: 'Logos, colors, typography, and downloads.',
     kind: 'Pages',
   },
   {
     title: 'About Cloud Tools',
+    icon: Info,
     href: '/about',
     description: 'A small toolbox for everyday file work.',
     kind: 'Pages',
   },
   {
     title: 'Jobs',
+    icon: FileClock,
     href: '/jobs',
     description: 'Check progress and download your converted files.',
     kind: 'Pages',
   },
   {
     title: 'Service status',
+    icon: Activity,
     href: '/status',
     description: 'Check the health of your conversion services.',
     kind: 'Pages',
@@ -163,6 +168,7 @@ export function SearchTool({
                 onNavigate?.();
               }}
             >
+              <item.icon className="result-icon" size={22} strokeWidth={1.6} aria-hidden="true" />
               <span className="result-copy">
                 <strong>{item.title}</strong>
                 <small>{item.description}</small>
