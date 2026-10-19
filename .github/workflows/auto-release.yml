@@ -1,0 +1,52 @@
+name: auto-release
+on:
+  workflow_run:
+    workflows: [ci]
+    branches: [master]
+    types: [completed]
+permissions:
+  contents: write
+concurrency:
+  group: auto-release-master
+  cancel-in-progress: false
+jobs:
+  release:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - name: Tag the verified revision and publish release notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          git fetch origin master --tags
+          # A newer default-branch push must pass its own CI first.
+          if [ "$(git rev-parse origin/master)" != "$VERIFIED_SHA" ]; then
+            echo "Skipping superseded revision"
+            exit 0
+          fi
+          tag="$(git tag --points-at "$VERIFIED_SHA" | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1 || true)"
+          if [ -z "$tag" ]; then
+            latest="$(git tag --merged "$VERIFIED_SHA" | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1 || true)"
+            if [ -z "$latest" ]; then
+              tag=v0.1.0
+            else
+              prefix="${latest%.*}"
+              patch="${latest##*.}"
+              tag="$prefix.$((patch + 1))"
+            fi
+            git tag "$tag" "$VERIFIED_SHA"
+            git push origin "$tag"
+          fi
+          if ! gh release view "$tag" >/dev/null 2>&1; then
+            gh release create "$tag" --verify-tag --generate-notes --title "$tag"
+          fi

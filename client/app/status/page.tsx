@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { PageTransition } from "@/components/page-transition";
-import StatusDashboard from "@/components/status-dashboard";
+import { PageTransition } from '@/components/page-transition';
+import StatusDashboard from '@/components/status-dashboard';
 
 export default function StatusPage() {
   return (
@@ -19,9 +19,8 @@ export default function StatusPage() {
 
           <div className="mt-8 text-center text-sm text-muted-foreground">
             <p>
-              This page shows the operational status of all Cloud Tools
-              services. Status is updated in real-time and refreshed
-              automatically.
+              This page shows the operational status of all Cloud Tools services. Status is updated
+              in real-time and refreshed automatically.
             </p>
           </div>
         </div>

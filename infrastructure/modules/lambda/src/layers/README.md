@@ -29,6 +29,7 @@ The binary dependencies layer includes:
    ```
 
 3. **Create ZIP files**:
+
    ```bash
    cd layers/sharp
    zip -r sharp-layer.zip nodejs/

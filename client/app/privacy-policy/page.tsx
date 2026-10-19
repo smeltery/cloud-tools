@@ -1,278 +1,53 @@
-"use client";
-
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import { PageTransition } from "@/components/page-transition";
-
-const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5 },
-};
-
-export default function PrivacyPolicyPage() {
+import Link from 'next/link';
+export const metadata = { title: 'Privacy' };
+export default function Page() {
   return (
-    <PageTransition>
-      <div className="flex flex-col">
-        {/* Hero Section */}
-        <motion.section
-          className="bg-gradient-to-br from-primary to-primary/70 text-primary-foreground py-24 md:py-32"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <motion.h1
-                className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight"
-                variants={fadeInUp}
-                initial="initial"
-                animate="animate"
-              >
-                Privacy Policy
-              </motion.h1>
-              <motion.p
-                className="text-xl md:text-2xl opacity-90"
-                variants={fadeInUp}
-                initial="initial"
-                animate="animate"
-                transition={{ delay: 0.2 }}
-              >
-                How we collect, use, and protect your information
-              </motion.p>
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Main Content */}
-        <main className="flex-grow bg-background">
-          <motion.section
-            className="py-16 md:py-24"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-            transition={{ delay: 0.4 }}
-          >
-            <div className="container mx-auto px-4">
-              <div className="max-w-3xl mx-auto space-y-8">
-                <motion.h2
-                  className="text-3xl font-bold"
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 0.6 }}
-                >
-                  1. Information We Collect
-                </motion.h2>
-                <motion.p
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 0.7 }}
-                >
-                  We collect information you provide directly to us when using
-                  our services, including:
-                </motion.p>
-                <motion.ul
-                  className="list-disc pl-6 space-y-2"
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 0.8 }}
-                >
-                  <li>
-                    Personal information (e.g., name, email address) when you
-                    create an account
-                  </li>
-                  <li>Files you upload for conversion or compression</li>
-                  <li>Usage data and analytics information</li>
-                </motion.ul>
-
-                <motion.h2
-                  className="text-3xl font-bold"
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 0.9 }}
-                >
-                  2. How We Use Your Information
-                </motion.h2>
-                <motion.p
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 1 }}
-                >
-                  We use the information we collect to:
-                </motion.p>
-                <motion.ul
-                  className="list-disc pl-6 space-y-2"
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 1.1 }}
-                >
-                  <li>Provide, maintain, and improve our services</li>
-                  <li>Process your file conversions and compressions</li>
-                  <li>
-                    Send you technical notices, updates, and support messages
-                  </li>
-                  <li>Respond to your comments and questions</li>
-                </motion.ul>
-
-                <motion.h2
-                  className="text-3xl font-bold"
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 1.2 }}
-                >
-                  3. Data Security
-                </motion.h2>
-                <motion.p
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 1.3 }}
-                >
-                  We implement appropriate technical and organizational measures
-                  to protect your personal information, including encryption of
-                  data in transit and at rest. However, no method of
-                  transmission over the Internet or electronic storage is 100%
-                  secure, so we cannot guarantee absolute security.
-                </motion.p>
-
-                <motion.h2
-                  className="text-3xl font-bold"
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 1.4 }}
-                >
-                  4. Data Retention
-                </motion.h2>
-                <motion.p
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 1.5 }}
-                >
-                  We retain your personal information only for as long as
-                  necessary to fulfill the purposes for which we collected it,
-                  including for the purposes of satisfying any legal,
-                  accounting, or reporting requirements.
-                </motion.p>
-
-                <motion.h2
-                  className="text-3xl font-bold"
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 1.6 }}
-                >
-                  5. Your Rights
-                </motion.h2>
-                <motion.p
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 1.7 }}
-                >
-                  Depending on your location, you may have certain rights
-                  regarding your personal information, including:
-                </motion.p>
-                <motion.ul
-                  className="list-disc pl-6 space-y-2"
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 1.8 }}
-                >
-                  <li>The right to access your personal information</li>
-                  <li>The right to rectify inaccurate personal information</li>
-                  <li>The right to erase your personal information</li>
-                  <li>
-                    The right to restrict processing of your personal
-                    information
-                  </li>
-                </motion.ul>
-
-                <motion.h2
-                  className="text-3xl font-bold"
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 1.9 }}
-                >
-                  6. Changes to This Privacy Policy
-                </motion.h2>
-                <motion.p
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 2 }}
-                >
-                  We may update this Privacy Policy from time to time. We will
-                  notify you of any changes by posting the new Privacy Policy on
-                  this page and updating the &ldquo;Last updated&rdquo; date at
-                  the top of this Privacy Policy.
-                </motion.p>
-
-                <motion.h2
-                  className="text-3xl font-bold"
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 2.1 }}
-                >
-                  7. Contact Us
-                </motion.h2>
-                <motion.p
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 2.2 }}
-                >
-                  If you have any questions about this Privacy Policy, please
-                  contact us at:
-                </motion.p>
-                <motion.p
-                  className="font-semibold"
-                  variants={fadeInUp}
-                  initial="initial"
-                  animate="animate"
-                  transition={{ delay: 2.3 }}
-                >
-                  privacy@cloudtools.com
-                </motion.p>
-              </div>
-            </div>
-          </motion.section>
-
-          {/* Call to Action */}
-          <motion.section
-            className="bg-secondary py-16"
-            variants={fadeInUp}
-            initial="initial"
-            animate="animate"
-            transition={{ delay: 2.4 }}
-          >
-            <div className="container mx-auto px-4 text-center">
-              <h2 className="text-3xl font-bold mb-6">Ready to get started?</h2>
-              <p className="text-xl mb-8 text-muted-foreground">
-                Try our file conversion and compression tools today.
-              </p>
-              <Link href="/tools/converters/image">
-                <Button size="lg" className="font-semibold">
-                  Get Started <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-            </div>
-          </motion.section>
-        </main>
+    <article className="wrap tools-section">
+      <div className="max-w-3xl mx-auto">
+        <p className="eyebrow">Privacy</p>
+        <h1 className="text-4xl md:text-5xl my-8">Know where your files go.</h1>
+        <section key="0" className="border-t py-8">
+          <h2 className="text-2xl mb-4">Uploads and processing</h2>
+          <p className="text-muted-foreground leading-8">
+            This application uploads selected files to the storage configured by its operator. A
+            worker reads those files and writes processed outputs. It is not a browser-only
+            converter.
+          </p>
+        </section>
+        <section key="1" className="border-t py-8">
+          <h2 className="text-2xl mb-4">Job records and browser history</h2>
+          <p className="text-muted-foreground leading-8">
+            Job records include file names, types, sizes, operation, timestamps, and status. Recent
+            conversion history is stored in browser local storage. Clearing browser history does not
+            delete server-side files or job records.
+          </p>
+        </section>
+        <section key="2" className="border-t py-8">
+          <h2 className="text-2xl mb-4">Retention and access</h2>
+          <p className="text-muted-foreground leading-8">
+            Retention, storage access, logs, and deployment-level analytics depend on the
+            installation. This project does not promise a fixed deletion window. The current API has
+            no built-in per-user access controls; use a trusted installation and consult its
+            operator before sending sensitive files.
+          </p>
+        </section>
+        <section key="3" className="border-t py-8">
+          <h2 className="text-2xl mb-4">Questions about your data</h2>
+          <p className="text-muted-foreground leading-8">
+            Contact the operator of the installation you are using for its retention and deletion
+            practices. For software behavior or bugs, use the repository issue tracker without
+            attaching private files or credentials.
+          </p>
+        </section>
+        <div className="hero-actions">
+          <Link className="primary-link" href="/#tools">
+            Explore tools
+          </Link>
+          <Link className="text-link" href="/docs">
+            Read the documentation
+          </Link>
+        </div>
       </div>
-    </PageTransition>
+    </article>
   );
 }

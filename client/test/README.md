@@ -32,7 +32,7 @@ npm run test:watch
 
 ## 📁 Test Structure
 
-```
+```text
 test/
 ├── setup.ts                           # Global test setup and mocks
 ├── mocks/
@@ -142,32 +142,34 @@ npm install --save-dev \
 
 1. **Create test files** following the naming convention: `*.test.ts` or `*.test.tsx`
 2. **Import necessary testing utilities**:
+
    ```typescript
-   import { describe, it, expect, vi, beforeEach } from "vitest";
-   import { render, screen, fireEvent } from "@testing-library/react";
+   import { describe, it, expect, vi, beforeEach } from 'vitest';
+   import { render, screen, fireEvent } from '@testing-library/react';
    ```
+
 3. **Use the established mocking patterns** from `test/mocks/aws.ts`
 4. **Follow the AAA pattern**: Arrange, Act, Assert
 
 ### Example Test Structure
 
 ```typescript
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-describe("ComponentName", () => {
+describe('ComponentName', () => {
   beforeEach(() => {
     // Setup before each test
   });
 
-  it("should do something specific", () => {
+  it('should do something specific', () => {
     // Arrange
-    const input = "test input";
+    const input = 'test input';
 
     // Act
     const result = functionUnderTest(input);
 
     // Assert
-    expect(result).toBe("expected output");
+    expect(result).toBe('expected output');
   });
 });
 ```

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { PageTransition } from "@/components/page-transition";
-import JobStatus from "@/components/job-status";
+import { PageTransition } from '@/components/page-transition';
+import JobStatus from '@/components/job-status';
 
 export default function JobsPage() {
   return (
@@ -19,8 +19,8 @@ export default function JobsPage() {
 
           <div className="mt-8 text-center text-sm text-muted-foreground">
             <p>
-              Job IDs are provided when you upload files for processing. Check
-              your browser notifications or local storage for job IDs.
+              Job IDs are provided when you upload files for processing. Check your browser
+              notifications or local storage for job IDs.
             </p>
           </div>
         </div>

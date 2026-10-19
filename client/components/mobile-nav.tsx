@@ -1,159 +1,108 @@
-"use client";
-
-import React from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import {
-  Menu,
-  Home,
-  PenToolIcon as Tools,
-  Info,
-  ChevronRight,
-  Image,
-  Minimize2,
-  BookOpen,
-  Music,
-  Video,
-  FileImage,
-  FileText,
-  RefreshCcw,
-  Briefcase,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { SearchTool } from "./search-tool";
-
-const toolCategories = [
-  {
-    name: "Converters",
-    icon: RefreshCcw,
-    subcategories: [
-      { name: "eBooks", href: "/tools/converters/ebooks", icon: BookOpen },
-      { name: "Audio", href: "/tools/converters/audio", icon: Music },
-      { name: "Video", href: "/tools/converters/video", icon: Video },
-      { name: "Image", href: "/tools/converters/image", icon: Image },
-    ],
-  },
-  {
-    name: "Compression",
-    icon: Minimize2,
-    subcategories: [
-      { name: "Image", href: "/tools/compression/image", icon: FileImage },
-      { name: "PDF", href: "/tools/compression/pdf", icon: FileText },
-    ],
-  },
-];
-
-const navItems = [
-  { name: "Home", href: "/", icon: Home },
-  { name: "Jobs", href: "/jobs", icon: Briefcase },
-  { name: "About", href: "/about", icon: Info },
-];
-
+'use client';
+import Link from 'next/link';
+import { useRef, useState } from 'react';
+import { Menu, X, BookOpen, Compass, LayoutGrid } from 'lucide-react';
+import Logo from './logo';
+import { tools } from '@/lib/catalog';
+import { GitHubIcon } from './github-icon';
+import { SearchTool } from './search-tool';
 export function MobileNav() {
-  const pathname = usePathname();
-
+  const dialog = useRef<HTMLDialogElement>(null);
+  const [open, setOpen] = useState(false);
+  function close() {
+    dialog.current?.close();
+    setOpen(false);
+  }
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden">
-          <Menu className="h-6 w-6" />
-          <span className="sr-only">Toggle mobile navigation</span>
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="left" className="w-[300px] sm:w-[400px]">
-        <SheetHeader className="border-b pb-4 mb-4 flex items-center justify-between">
-          <SheetTitle className="text-2xl font-bold">Cloud Tools</SheetTitle>
-          <SearchTool />
-        </SheetHeader>
-        <nav className="flex flex-col space-y-4">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`flex items-center justify-between p-2 rounded-lg transition-colors ${
-                  isActive
-                    ? "bg-primary text-primary-foreground"
-                    : "hover:bg-muted"
-                }`}
-              >
-                <div className="flex items-center space-x-4">
-                  <Icon className="h-5 w-5" />
-                  <span className="text-lg font-medium">{item.name}</span>
-                </div>
-                <ChevronRight className="h-5 w-5" />
-              </Link>
-            );
-          })}
-          <Accordion type="multiple" className="w-full">
-            <AccordionItem value="tools">
-              <AccordionTrigger className="flex items-center justify-between p-2 rounded-lg transition-colors hover:bg-muted hover:no-underline">
-                <div className="flex items-center space-x-4">
-                  <Tools className="h-5 w-5" />
-                  <span className="text-lg font-medium">Tools</span>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className="pl-4 space-y-2">
-                  {toolCategories.map((category) => (
-                    <Accordion
-                      type="single"
-                      collapsible
-                      className="w-full"
-                      key={category.name}
-                    >
-                      <AccordionItem value={category.name}>
-                        <AccordionTrigger className="flex items-center justify-between p-2 rounded-lg transition-colors hover:bg-muted hover:no-underline">
-                          <div className="flex items-center space-x-4">
-                            <category.icon className="h-4 w-4" />
-                            <span className="text-md font-medium">
-                              {category.name}
-                            </span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent>
-                          <div className="pl-8 space-y-2">
-                            {category.subcategories.map((subcategory) => (
-                              <Link
-                                key={subcategory.name}
-                                href={subcategory.href}
-                                className="flex items-center space-x-2 p-2 rounded-lg transition-colors hover:bg-muted"
-                              >
-                                <subcategory.icon className="h-4 w-4" />
-                                <span>{subcategory.name}</span>
-                              </Link>
-                            ))}
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                  ))}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </nav>
-        <div className="mt-6 flex items-center justify-between">
-          <span className="text-sm font-medium">Switch theme</span>
-          <ThemeToggle />
+    <>
+      <button
+        className="menu-toggle"
+        aria-haspopup="dialog"
+        aria-controls="mobile-menu"
+        aria-expanded={open}
+        onClick={() => {
+          dialog.current?.showModal();
+          setOpen(true);
+        }}
+      >
+        Menu <Menu size={17} />
+      </button>
+      <dialog
+        ref={dialog}
+        id="mobile-menu"
+        className="mobile-dialog"
+        aria-labelledby="mobile-title"
+        onClose={() => setOpen(false)}
+      >
+        <div className="mobile-panel-heading">
+          <Logo />
+          <button className="close-overlay" aria-label="Close navigation" onClick={close}>
+            <X />
+          </button>
         </div>
-      </SheetContent>
-    </Sheet>
+        <div className="mobile-panel-body">
+          <p className="eyebrow">A little utility goes a long way</p>
+          <h2 id="mobile-title">What’s next?</h2>
+          <SearchTool mobile onNavigate={close} />
+          <nav
+            className="mobile-primary"
+            aria-label="Mobile navigation"
+            onClick={e => {
+              if ((e.target as HTMLElement).closest('a')) close();
+            }}
+          >
+            <Link className="mobile-feature-card" href="/#tools">
+              <LayoutGrid />
+              <span>
+                <strong>Explore tools</strong>
+                <small>Find the right tool for your next file.</small>
+              </span>
+              <span className="nav-count">6</span>
+            </Link>
+            <div className="mobile-resource-grid">
+              <Link href="/docs/quick-start">
+                <BookOpen />
+                <strong>Getting started</strong>
+                <small>From upload to your first download.</small>
+              </Link>
+              <Link href="/docs">
+                <Compass />
+                <strong>Documentation</strong>
+                <small>Good workflows, written down.</small>
+              </Link>
+            </div>
+          </nav>
+          <section className="mobile-tasks">
+            <div className="mobile-section-label">
+              <h3>Browse by task</h3>
+              <span>Start with a file</span>
+            </div>
+            <nav aria-label="File tools">
+              {tools.map(tool => (
+                <Link key={tool.href} href={tool.href} onClick={close}>
+                  <tool.icon size={20} />
+                  <span>{tool.title}</span>
+                  <small>{tool.category}</small>
+                </Link>
+              ))}
+            </nav>
+          </section>
+          <aside className="mobile-starter">
+            <p className="eyebrow">Not sure where to begin?</p>
+            <h3>A lighter image is a good start.</h3>
+            <p>Choose your image, select a format, and track the result.</p>
+            <Link href="/tools/converters/image" onClick={close}>
+              Explore image conversion
+            </Link>
+          </aside>
+        </div>
+        <div className="mobile-panel-footer">
+          <a href="https://github.com/smeltery/cloud-tools" className="icon-link">
+            <GitHubIcon /> GitHub
+          </a>
+          <a href="https://github.com/smeltery/cloud-tools/issues">Feedback &amp; issues</a>
+        </div>
+      </dialog>
+    </>
   );
 }

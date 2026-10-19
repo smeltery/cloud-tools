@@ -1,4 +1,4 @@
-import { vi } from "vitest";
+import { vi } from 'vitest';
 
 // Mock functions
 export const mockS3Send = vi.fn();
@@ -25,44 +25,38 @@ export const mockSQSClient = {
 
 // Create mock command constructors that work with 'new' keyword
 export const mockPutObjectCommand = vi.fn(function (this: any, params: any) {
-  Object.assign(this, params, { __type: "PutObjectCommand" });
+  Object.assign(this, params, { __type: 'PutObjectCommand' });
 });
 export const mockGetObjectCommand = vi.fn(function (this: any, params: any) {
-  Object.assign(this, params, { __type: "GetObjectCommand" });
+  Object.assign(this, params, { __type: 'GetObjectCommand' });
 });
 export const mockPutCommand = vi.fn(function (this: any, params: any) {
-  Object.assign(this, params, { __type: "PutCommand" });
+  Object.assign(this, params, { __type: 'PutCommand' });
 });
 export const mockGetCommand = vi.fn(function (this: any, params: any) {
-  Object.assign(this, params, { __type: "GetCommand" });
+  Object.assign(this, params, { __type: 'GetCommand' });
 });
 export const mockScanCommand = vi.fn(function (this: any, params: any) {
-  Object.assign(this, params, { __type: "ScanCommand" });
+  Object.assign(this, params, { __type: 'ScanCommand' });
 });
 export const mockUpdateCommand = vi.fn(function (this: any, params: any) {
-  Object.assign(this, params, { __type: "UpdateCommand" });
+  Object.assign(this, params, { __type: 'UpdateCommand' });
 });
 export const mockSendMessageCommand = vi.fn(function (this: any, params: any) {
-  Object.assign(this, params, { __type: "SendMessageCommand" });
+  Object.assign(this, params, { __type: 'SendMessageCommand' });
 });
-export const mockReceiveMessageCommand = vi.fn(function (
-  this: any,
-  params: any,
-) {
-  Object.assign(this, params, { __type: "ReceiveMessageCommand" });
+export const mockReceiveMessageCommand = vi.fn(function (this: any, params: any) {
+  Object.assign(this, params, { __type: 'ReceiveMessageCommand' });
 });
-export const mockDeleteMessageCommand = vi.fn(function (
-  this: any,
-  params: any,
-) {
-  Object.assign(this, params, { __type: "DeleteMessageCommand" });
+export const mockDeleteMessageCommand = vi.fn(function (this: any, params: any) {
+  Object.assign(this, params, { __type: 'DeleteMessageCommand' });
 });
 export const mockGetQueueUrlCommand = vi.fn(function (this: any, params: any) {
-  Object.assign(this, params, { __type: "GetQueueUrlCommand" });
+  Object.assign(this, params, { __type: 'GetQueueUrlCommand' });
 });
 
 // Mock AWS SDK modules with proper constructor functions
-vi.mock("@aws-sdk/client-s3", () => {
+vi.mock('@aws-sdk/client-s3', () => {
   const MockS3Client = vi.fn(function (this: any) {
     return mockS3Client;
   });
@@ -73,7 +67,7 @@ vi.mock("@aws-sdk/client-s3", () => {
   };
 });
 
-vi.mock("@aws-sdk/client-dynamodb", () => {
+vi.mock('@aws-sdk/client-dynamodb', () => {
   const MockDynamoDBClient = vi.fn(function (this: any) {
     return mockDynamoClient;
   });
@@ -82,7 +76,7 @@ vi.mock("@aws-sdk/client-dynamodb", () => {
   };
 });
 
-vi.mock("@aws-sdk/lib-dynamodb", () => ({
+vi.mock('@aws-sdk/lib-dynamodb', () => ({
   DynamoDBDocumentClient: {
     from: vi.fn(() => mockDocClient),
   },
@@ -92,7 +86,7 @@ vi.mock("@aws-sdk/lib-dynamodb", () => ({
   UpdateCommand: mockUpdateCommand,
 }));
 
-vi.mock("@aws-sdk/client-sqs", () => {
+vi.mock('@aws-sdk/client-sqs', () => {
   const MockSQSClient = vi.fn(function (this: any) {
     return mockSQSClient;
   });
@@ -106,8 +100,8 @@ vi.mock("@aws-sdk/client-sqs", () => {
 });
 
 // Mock the aws-config module to use our mocked clients
-vi.mock("@/root-lib/aws-config", async () => {
-  const actual = await vi.importActual("@/root-lib/aws-config");
+vi.mock('@/root-lib/aws-config', async () => {
+  const actual = await vi.importActual('@/root-lib/aws-config');
   return {
     ...actual,
     s3Client: mockS3Client,
@@ -115,10 +109,10 @@ vi.mock("@/root-lib/aws-config", async () => {
     docClient: mockDocClient,
     sqsClient: mockSQSClient,
     AWS_RESOURCES: {
-      S3_BUCKET: "test-bucket",
-      DYNAMODB_TABLE: "TestTable",
-      SQS_QUEUE: "test-queue",
-      SQS_QUEUE_URL: "http://localhost:4566/000000000000/test-queue",
+      S3_BUCKET: 'test-bucket',
+      DYNAMODB_TABLE: 'TestTable',
+      SQS_QUEUE: 'test-queue',
+      SQS_QUEUE_URL: 'http://localhost:4566/000000000000/test-queue',
     },
   };
 });

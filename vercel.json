@@ -1,7 +1,7 @@
 {
-  "buildCommand": "pnpm --filter client build",
+  "buildCommand": "bun run build",
   "outputDirectory": "client/.next",
-  "installCommand": "pnpm install --no-frozen-lockfile",
+  "installCommand": "bun install --frozen-lockfile",
   "framework": "nextjs",
   "headers": [
     {

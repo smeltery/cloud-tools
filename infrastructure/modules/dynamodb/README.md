@@ -198,13 +198,13 @@ The table includes TTL configuration for automatic cleanup:
 
 ### Backup Strategy
 
-**Point-in-Time Recovery**
+### Point-in-Time Recovery
 
 - Continuous backups up to 35 days
 - Enables restore to any second within the backup window
 - Essential for production data protection
 
-**Daily Backups**
+### Daily Backups
 
 - Automated daily backups for production environments
 - Backup naming: `{table-name}-backup-YYYY-MM-DD`
@@ -395,19 +395,19 @@ aws dynamodb batch-write-item --request-items file://backup.json
 
 ### Common Issues
 
-**Throttling Errors**
+### Throttling Errors
 
 - Check capacity settings for provisioned mode
 - Monitor hot keys and distribute access patterns
 - Consider GSI design optimization
 
-**TTL Not Working**
+### TTL Not Working
 
 - Verify TTL attribute format (Unix timestamp)
 - Check TTL enablement status
 - Allow up to 48 hours for TTL processing
 
-**Query Performance Issues**
+### Query Performance Issues
 
 - Analyze query patterns with Contributor Insights
 - Review GSI design and projections

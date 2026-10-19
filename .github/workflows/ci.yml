@@ -1,365 +1,61 @@
-name: Continuous Integration
-
+name: ci
 on:
   push:
     branches: [master]
   pull_request:
-    branches: [master]
-
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 env:
-  NODE_ENV: test
-  TF_VERSION: "1.6.0"
-  TFLINT_VERSION: "v0.48.0"
-
+  NEXT_TELEMETRY_DISABLED: "1"
 jobs:
-  lint-and-format:
-    name: Lint and Format Check
-    runs-on: ubuntu-latest
-
+  quality:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: flox/install-flox-action@v2
+      - uses: actions/cache@v4
         with:
-          node-version: "20.x"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run ESLint
-        run: pnpm run lint
-
-      - name: Lint Lambda templates
-        run: |
-          echo "🔍 Linting Lambda template JavaScript files..."
-
-          # Install ESLint globally for Lambda template linting
-          npm install -g eslint
-
-          # Lint Lambda template files
-          if find infrastructure/modules/lambda/lambda-templates -name '*.js' | grep -q .; then
-            eslint infrastructure/modules/lambda/lambda-templates/*.js
-            echo "✅ Lambda template linting completed"
-          else
-            echo "⚠️ No Lambda template JavaScript files found"
-          fi
-
-      - name: Check code formatting
-        run: pnpm run format:check
-        continue-on-error: true
-
-  type-check:
-    name: TypeScript Type Check
-    runs-on: ubuntu-latest
-
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+      - name: Install locked dependencies
+        run: flox activate -- bun install --frozen-lockfile
+      - name: Shared local and CI checks
+        run: flox activate -- bun run check
+      - name: Unit and integration tests with coverage
+        run: flox activate -- bun run test:coverage
+      - name: Production and Lambda builds
+        run: flox activate -- bun run build:all
+      - name: Browser dependencies
+        run: flox activate -- bunx playwright install --with-deps chromium
+      - name: Browser journeys and accessibility
+        run: flox activate -- bun run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports
+          path: |
+            client/coverage
+            playwright-report
+          retention-days: 7
+  infrastructure:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run TypeScript check
-        run: pnpm run type-check
-
-  test:
-    name: Unit Tests
-    runs-on: ubuntu-latest
-    needs: [lint-and-format, type-check]
-
-    strategy:
-      matrix:
-        node-version: [20.x]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run tests
-        run: pnpm run test:run
-        env:
-          NODE_ENV: test
-
-      - name: Generate test coverage
-        run: pnpm run test:coverage
-        env:
-          NODE_ENV: test
-
-      - name: Upload coverage reports
-        if: matrix.node-version == '20.x'
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./client/coverage/lcov.info
-          flags: unittests
-          name: node-${{ matrix.node-version }}
-          fail_ci_if_error: false
-
-  build:
-    name: Build Check
-    runs-on: ubuntu-latest
-    needs: [lint-and-format, type-check]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build application
-        run: pnpm run build
-        env:
-          NODE_ENV: production
-
-      - name: Check for build artifacts
-        run: |
-          if [ ! -d "client/.next" ]; then
-            echo "Build failed: client/.next directory not found"
-            exit 1
-          fi
-          echo "Build successful: client/.next directory exists"
-
+      - uses: actions/checkout@v5
+      - uses: flox/install-flox-action@v2
+      - run: flox activate -- bun run check:infra
   security:
-    name: Security Audit
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      security-events: write
-      actions: read
-
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: "20.x"
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run security audit
-        run: pnpm audit --audit-level=moderate
-        continue-on-error: true
-
-      - name: Check for known vulnerabilities
-        run: pnpm audit --audit-level=high
-
-  shellcheck:
-    name: Shell Script Validation
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Run ShellCheck
-        uses: ludeeus/action-shellcheck@master
-        with:
-          scandir: "./scripts"
-          format: gcc
-          severity: error
-        env:
-          SHELLCHECK_OPTS: -e SC1091 -S style
-
-      - name: Run ShellCheck on Infrastructure scripts
-        uses: ludeeus/action-shellcheck@master
-        with:
-          scandir: "./infrastructure/scripts"
-          format: gcc
-          severity: error
-        env:
-          SHELLCHECK_OPTS: -e SC1091 -S style
-
-  terraform-lint:
-    name: Terraform Linting & Validation
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Check for Terraform files
-        id: check-terraform
-        run: |
-          if find infrastructure/ -name '*.tf' -type f | grep -q .; then
-            echo "terraform_files=true" >> $GITHUB_OUTPUT
-            echo "Found Terraform files, proceeding with linting"
-          else
-            echo "terraform_files=false" >> $GITHUB_OUTPUT
-            echo "No Terraform files found, skipping linting"
-          fi
-
-      - name: Setup Terraform
-        if: steps.check-terraform.outputs.terraform_files == 'true'
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: ${{ env.TF_VERSION }}
-
-      - name: Cache TFLint plugins
-        if: steps.check-terraform.outputs.terraform_files == 'true'
-        uses: actions/cache@v3
-        with:
-          path: ~/.tflint.d/plugins
-          key: tflint-${{ hashFiles('infrastructure/.tflint.hcl') }}
-
-      - name: Setup TFLint
-        if: steps.check-terraform.outputs.terraform_files == 'true'
-        uses: terraform-linters/setup-tflint@v4
-        with:
-          tflint_version: ${{ env.TFLINT_VERSION }}
-
-      - name: Terraform Format Check
-        if: steps.check-terraform.outputs.terraform_files == 'true'
-        run: |
-          echo "🎨 Checking Terraform file formatting..."
-
-          if ! terraform fmt -check -recursive infrastructure/; then
-            echo "❌ Terraform files are not properly formatted!"
-            echo "Files that need formatting:"
-            terraform fmt -check -recursive -diff infrastructure/
-            echo "To fix, run: terraform fmt -recursive infrastructure/"
-            exit 1
-          else
-            echo "✅ All Terraform files are properly formatted!"
-          fi
-
-      - name: Initialize TFLint
-        if: steps.check-terraform.outputs.terraform_files == 'true'
-        run: |
-          cd infrastructure
-          tflint --init
-
-      - name: Run TFLint Analysis
-        if: steps.check-terraform.outputs.terraform_files == 'true'
-        run: |
-          echo "🔍 Running TFLint on Terraform modules..."
-
-          failed_modules=0
-
-          # Lint each module
-          for module_dir in infrastructure/modules/*/; do
-            if [[ -d "$module_dir" ]]; then
-              module_name=$(basename "$module_dir")
-              echo "📄 Linting module: $module_name"
-
-              if ! tflint --chdir="$module_dir"; then
-                echo "❌ $module_name - FAILED"
-                failed_modules=$((failed_modules + 1))
-              else
-                echo "✅ $module_name - PASSED"
-              fi
-            fi
-          done
-
-          # Lint environments
-          for env_dir in infrastructure/environments/*/; do
-            if [[ -d "$env_dir" ]]; then
-              env_name=$(basename "$env_dir")
-              echo "📄 Linting environment: $env_name"
-
-              if ! tflint --chdir="$env_dir"; then
-                echo "❌ $env_name - FAILED"
-                failed_modules=$((failed_modules + 1))
-              else
-                echo "✅ $env_name - PASSED"
-              fi
-            fi
-          done
-
-          if [ $failed_modules -gt 0 ]; then
-            echo "❌ TFLint found issues in $failed_modules module(s)"
-            exit 1
-          else
-            echo "✅ All Terraform modules passed TFLint validation!"
-          fi
-
-      - name: Terraform Security Scan
-        if: steps.check-terraform.outputs.terraform_files == 'true'
-        uses: bridgecrewio/checkov-action@master
-        with:
-          directory: infrastructure/
-          quiet: true
-          soft_fail: true
-          framework: terraform
-          output_format: cli
-          download_external_modules: false
-
-  summary:
-    name: CI Summary
-    runs-on: ubuntu-latest
-    needs:
-      [
-        lint-and-format,
-        type-check,
-        test,
-        build,
-        security,
-        shellcheck,
-        terraform-lint,
-      ]
-    if: always()
-
-    steps:
-      - name: Check all jobs status
-        run: |
-          echo "Lint and Format: ${{ needs.lint-and-format.result }}"
-          echo "Type Check: ${{ needs.type-check.result }}"
-          echo "Tests: ${{ needs.test.result }}"
-          echo "Build: ${{ needs.build.result }}"
-          echo "Security: ${{ needs.security.result }}"
-          echo "ShellCheck: ${{ needs.shellcheck.result }}"
-          echo "Terraform Lint: ${{ needs.terraform-lint.result }}"
-
-          if [[ "${{ needs.lint-and-format.result }}" == "failure" ||
-                "${{ needs.type-check.result }}" == "failure" ||
-                "${{ needs.test.result }}" == "failure" ||
-                "${{ needs.build.result }}" == "failure" ||
-                "${{ needs.shellcheck.result }}" == "failure" ||
-                "${{ needs.terraform-lint.result }}" == "failure" ]]; then
-            echo "❌ CI pipeline failed"
-            exit 1
-          else
-            echo "✅ CI pipeline passed"
-          fi
+          bun-version: 1.3.11
+      - run: bun install --frozen-lockfile
+      - run: bun run check:security

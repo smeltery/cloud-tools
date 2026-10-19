@@ -1,11 +1,12 @@
-import { Cloud } from "lucide-react";
-import Link from "next/link";
-
+import Link from 'next/link';
+import { Cloud } from 'lucide-react';
 export default function Logo() {
   return (
-    <Link href="/" className="flex items-center">
-      <Cloud className="w-8 h-8 mr-2 text-primary" />
-      <span className="text-2xl font-bold text-foreground">Cloud Tools</span>
+    <Link href="/" className="brand" aria-label="Cloud Tools home">
+      <Cloud size={32} strokeWidth={1.7} aria-hidden="true" />
+      <span>
+        smeltery<span className="brand-sub"> / cloud tools</span>
+      </span>
     </Link>
   );
 }

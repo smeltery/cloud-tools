@@ -47,9 +47,17 @@
  * @since 1.0.0
  */
 
-import { ReceiveMessageCommand, DeleteMessageCommand, Message } from '@aws-sdk/client-sqs';
-import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { GetCommand } from '@aws-sdk/lib-dynamodb';
+import {
+  ReceiveMessageCommand,
+  DeleteMessageCommand,
+  Message,
+} from "@aws-sdk/client-sqs";
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
+import { GetCommand } from "@aws-sdk/lib-dynamodb";
 import {
   sqsClient,
   docClient,
@@ -57,21 +65,21 @@ import {
   getS3BucketName,
   JobStatus,
   AWS_RESOURCES,
-} from './aws-config';
+} from "./aws-config";
 
 // Re-export JobStatus for test files
 export { JobStatus };
-import sharp from 'sharp';
+import sharp from "sharp";
 
 type SharpImage = ReturnType<typeof sharp>;
-import { PDFDocument } from 'pdf-lib';
-import ffmpeg from 'fluent-ffmpeg-7';
-import { promises as fs } from 'fs';
-import { tmpdir } from 'os';
-import { join } from 'path';
-import { randomUUID } from 'crypto';
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import { PDFDocument } from "pdf-lib";
+import ffmpeg from "fluent-ffmpeg-7";
+import { promises as fs } from "fs";
+import { tmpdir } from "os";
+import { join } from "path";
+import { randomUUID } from "crypto";
+import { exec } from "child_process";
+import { promisify } from "util";
 
 const execAsync = promisify(exec);
 
@@ -89,7 +97,7 @@ export interface ProcessingMessage {
   /** Unique identifier for the job */
   jobId: string;
   /** Type of operation to perform */
-  operation: 'convert' | 'compress';
+  operation: "convert" | "compress";
   /** Target format for conversion (required for convert operations) */
   targetFormat?: string;
   /** Quality setting for compression (0-100, default 80) */
@@ -150,7 +158,7 @@ export interface JobStatusUpdater {
       originalFileSize?: number;
       processedFileSize?: number;
       compressionSavings?: number;
-    }
+    },
   ): Promise<void>;
 }
 
@@ -247,7 +255,10 @@ export interface FileProcessor {
    * @returns {Promise<ProcessingResult>} Processed file result
    * @throws {Error} When processing fails
    */
-  process(buffer: Buffer, message: ProcessingMessage): Promise<ProcessingResult>;
+  process(
+    buffer: Buffer,
+    message: ProcessingMessage,
+  ): Promise<ProcessingResult>;
 }
 
 /**
@@ -311,7 +322,8 @@ export class ApiJobStatusUpdater implements JobStatusUpdater {
    * @param {string} [baseUrl] - Base URL for the API (defaults to NEXT_PUBLIC_APP_URL or localhost:3000)
    */
   constructor(
-    private baseUrl: string = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    private baseUrl: string = process.env.NEXT_PUBLIC_APP_URL ||
+      "http://localhost:3000",
   ) {}
 
   /**
@@ -337,10 +349,15 @@ export class ApiJobStatusUpdater implements JobStatusUpdater {
       originalFileSize?: number;
       processedFileSize?: number;
       compressionSavings?: number;
-    }
+    },
   ): Promise<void> {
     try {
-      const body: Record<string, unknown> = { jobId, status, progress, downloadUrl };
+      const body: Record<string, unknown> = {
+        jobId,
+        status,
+        progress,
+        downloadUrl,
+      };
 
       // Add compression data if provided
       if (compressionData) {
@@ -350,8 +367,8 @@ export class ApiJobStatusUpdater implements JobStatusUpdater {
       }
 
       const response = await fetch(`${this.baseUrl}/api/jobs`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
 
@@ -398,17 +415,18 @@ export class S3FileStorage implements FileStorage {
    */
   constructor(
     private bucketName: string,
-    private endpointUrl: string = process.env.AWS_ENDPOINT_URL || 'http://localhost:4566'
+    private endpointUrl: string = process.env.AWS_ENDPOINT_URL ||
+      "http://localhost:4566",
   ) {
     // Create our own S3 client with proper LocalStack configuration
-    const isLocal = process.env.NODE_ENV === 'development';
+    const isLocal = process.env.NODE_ENV === "development";
     this.s3Client = new S3Client({
-      region: process.env.AWS_REGION || 'us-east-1',
+      region: process.env.AWS_REGION || "us-east-1",
       endpoint: this.endpointUrl,
       credentials: isLocal
         ? {
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'test',
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'test',
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID || "test",
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "test",
           }
         : undefined,
       forcePathStyle: isLocal, // Critical for LocalStack
@@ -435,7 +453,10 @@ export class S3FileStorage implements FileStorage {
       Key: key,
     });
 
-    console.log(`📡 Sending S3 GetObject command:`, { Bucket: this.bucketName, Key: key });
+    console.log(`📡 Sending S3 GetObject command:`, {
+      Bucket: this.bucketName,
+      Key: key,
+    });
 
     const result = await this.s3Client.send(command);
     if (!result.Body) {
@@ -454,7 +475,11 @@ export class S3FileStorage implements FileStorage {
    * @returns {Promise<void>} Promise that resolves when file is stored
    * @throws {Error} When file cannot be stored
    */
-  async putFile(key: string, buffer: Buffer, contentType: string): Promise<void> {
+  async putFile(
+    key: string,
+    buffer: Buffer,
+    contentType: string,
+  ): Promise<void> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,
@@ -521,7 +546,7 @@ export class SqsMessageQueue implements MessageQueue {
       QueueUrl: this.queueUrl,
       MaxNumberOfMessages: 1,
       WaitTimeSeconds: 20,
-      MessageAttributeNames: ['All'],
+      MessageAttributeNames: ["All"],
     });
 
     const result = await sqsClient.send(command);
@@ -573,9 +598,18 @@ export class SqsMessageQueue implements MessageQueue {
  */
 export class SharpImageConverter implements FileProcessor {
   /** Supported image formats for processing */
-  private readonly supportedFormats = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'tiff', 'tif', 'bmp'];
+  private readonly supportedFormats = [
+    "jpg",
+    "jpeg",
+    "png",
+    "webp",
+    "gif",
+    "tiff",
+    "tif",
+    "bmp",
+  ];
   /** Supported operations */
-  private readonly supportedOperations = ['convert', 'compress'];
+  private readonly supportedOperations = ["convert", "compress"];
 
   /**
    * Determines if this processor can handle the given operation and format.
@@ -586,7 +620,8 @@ export class SharpImageConverter implements FileProcessor {
    */
   canProcess(operation: string, format?: string): boolean {
     if (!this.supportedOperations.includes(operation)) return false;
-    if (format && !this.supportedFormats.includes(format.toLowerCase())) return false;
+    if (format && !this.supportedFormats.includes(format.toLowerCase()))
+      return false;
     return true;
   }
 
@@ -598,12 +633,15 @@ export class SharpImageConverter implements FileProcessor {
    * @returns {Promise<ProcessingResult>} Processed image result
    * @throws {Error} When processing fails or unsupported operation
    */
-  async process(buffer: Buffer, message: ProcessingMessage): Promise<ProcessingResult> {
+  async process(
+    buffer: Buffer,
+    message: ProcessingMessage,
+  ): Promise<ProcessingResult> {
     const sharpImage = sharp(buffer);
 
-    if (message.operation === 'convert') {
+    if (message.operation === "convert") {
       return this.convertImage(sharpImage, message.targetFormat!);
-    } else if (message.operation === 'compress') {
+    } else if (message.operation === "compress") {
       return this.compressImage(sharpImage, message.quality || 80);
     }
 
@@ -612,25 +650,25 @@ export class SharpImageConverter implements FileProcessor {
 
   private async convertImage(
     sharpImage: SharpImage,
-    targetFormat: string
+    targetFormat: string,
   ): Promise<ProcessingResult> {
     let buffer: Buffer;
     const format = targetFormat.toLowerCase();
 
     switch (format) {
-      case 'jpg':
-      case 'jpeg':
+      case "jpg":
+      case "jpeg":
         buffer = await sharpImage.jpeg({ quality: 90 }).toBuffer();
-        return { buffer, contentType: 'image/jpeg', fileExtension: format };
-      case 'png':
+        return { buffer, contentType: "image/jpeg", fileExtension: format };
+      case "png":
         buffer = await sharpImage.png().toBuffer();
-        return { buffer, contentType: 'image/png', fileExtension: 'png' };
-      case 'webp':
+        return { buffer, contentType: "image/png", fileExtension: "png" };
+      case "webp":
         buffer = await sharpImage.webp({ quality: 90 }).toBuffer();
-        return { buffer, contentType: 'image/webp', fileExtension: 'webp' };
-      case 'gif':
+        return { buffer, contentType: "image/webp", fileExtension: "webp" };
+      case "gif":
         buffer = await sharpImage.gif().toBuffer();
-        return { buffer, contentType: 'image/gif', fileExtension: 'gif' };
+        return { buffer, contentType: "image/gif", fileExtension: "gif" };
       default:
         throw new Error(`Unsupported target format: ${targetFormat}`);
     }
@@ -644,7 +682,10 @@ export class SharpImageConverter implements FileProcessor {
    * @param {number} quality - Compression quality (0-100, higher means better quality)
    * @returns {Promise<ProcessingResult>} Compressed image result
    */
-  private async compressImage(sharpImage: SharpImage, quality: number): Promise<ProcessingResult> {
+  private async compressImage(
+    sharpImage: SharpImage,
+    quality: number,
+  ): Promise<ProcessingResult> {
     const metadata = await sharpImage.metadata();
     let buffer: Buffer;
     let contentType: string;
@@ -662,7 +703,7 @@ export class SharpImageConverter implements FileProcessor {
         processedImage = processedImage.resize({
           width: Math.round(width * scaleFactor),
           height: Math.round(height * scaleFactor),
-          fit: 'inside',
+          fit: "inside",
           withoutEnlargement: true,
         });
       }
@@ -672,7 +713,7 @@ export class SharpImageConverter implements FileProcessor {
     const formatString = metadata.format as string;
 
     switch (formatString) {
-      case 'jpeg':
+      case "jpeg":
         buffer = await processedImage
           .jpeg({
             quality,
@@ -680,11 +721,11 @@ export class SharpImageConverter implements FileProcessor {
             mozjpeg: true, // Use mozjpeg encoder for better compression
           })
           .toBuffer();
-        contentType = 'image/jpeg';
-        fileExtension = 'jpg';
+        contentType = "image/jpeg";
+        fileExtension = "jpg";
         break;
 
-      case 'png':
+      case "png":
         // PNG compression strategies based on quality
         const pngOptions = {
           compressionLevel: quality > 80 ? 6 : 9, // Higher compression for lower quality
@@ -692,11 +733,11 @@ export class SharpImageConverter implements FileProcessor {
           palette: quality < 50, // Use palette for aggressive compression
         };
         buffer = await processedImage.png(pngOptions).toBuffer();
-        contentType = 'image/png';
-        fileExtension = 'png';
+        contentType = "image/png";
+        fileExtension = "png";
         break;
 
-      case 'webp':
+      case "webp":
         buffer = await processedImage
           .webp({
             quality,
@@ -704,11 +745,11 @@ export class SharpImageConverter implements FileProcessor {
             lossless: false, // Ensure lossy compression for size reduction
           })
           .toBuffer();
-        contentType = 'image/webp';
-        fileExtension = 'webp';
+        contentType = "image/webp";
+        fileExtension = "webp";
         break;
 
-      case 'gif':
+      case "gif":
         // GIF doesn't support quality, so we optimize differently
         buffer = await processedImage
           .gif({
@@ -716,11 +757,11 @@ export class SharpImageConverter implements FileProcessor {
             dither: quality > 60 ? 1.0 : 0.5,
           })
           .toBuffer();
-        contentType = 'image/gif';
-        fileExtension = 'gif';
+        contentType = "image/gif";
+        fileExtension = "gif";
         break;
 
-      case 'tiff':
+      case "tiff":
         // Convert TIFF to JPEG for better compression
         buffer = await processedImage
           .jpeg({
@@ -729,13 +770,13 @@ export class SharpImageConverter implements FileProcessor {
             mozjpeg: true,
           })
           .toBuffer();
-        contentType = 'image/jpeg';
-        fileExtension = 'jpg';
+        contentType = "image/jpeg";
+        fileExtension = "jpg";
         break;
 
       // Handle formats that Sharp might detect but aren't in the enum
-      case 'bmp':
-      case 'bitmap':
+      case "bmp":
+      case "bitmap":
         // Convert BMP to PNG for better compression
         buffer = await processedImage
           .png({
@@ -743,8 +784,8 @@ export class SharpImageConverter implements FileProcessor {
             palette: quality < 60,
           })
           .toBuffer();
-        contentType = 'image/png';
-        fileExtension = 'png';
+        contentType = "image/png";
+        fileExtension = "png";
         break;
 
       default:
@@ -756,8 +797,8 @@ export class SharpImageConverter implements FileProcessor {
             effort: 6,
           })
           .toBuffer();
-        contentType = 'image/webp';
-        fileExtension = 'webp';
+        contentType = "image/webp";
+        fileExtension = "webp";
     }
 
     return { buffer, contentType, fileExtension };
@@ -792,7 +833,7 @@ export class SharpImageConverter implements FileProcessor {
  */
 export class PDFCompressor implements FileProcessor {
   /** Supported operations for PDF files */
-  private readonly supportedOperations = ['compress'];
+  private readonly supportedOperations = ["compress"];
 
   /**
    * Determines if this processor can handle the given operation.
@@ -812,8 +853,11 @@ export class PDFCompressor implements FileProcessor {
    * @returns {Promise<ProcessingResult>} Processed PDF result
    * @throws {Error} When processing fails or unsupported operation
    */
-  async process(buffer: Buffer, message: ProcessingMessage): Promise<ProcessingResult> {
-    if (message.operation === 'compress') {
+  async process(
+    buffer: Buffer,
+    message: ProcessingMessage,
+  ): Promise<ProcessingResult> {
+    if (message.operation === "compress") {
       return this.compressPDF(buffer, message.quality || 80);
     }
 
@@ -828,7 +872,10 @@ export class PDFCompressor implements FileProcessor {
    * @param {number} quality - Compression quality (0-100, higher means better quality)
    * @returns {Promise<ProcessingResult>} Compressed PDF result
    */
-  private async compressPDF(buffer: Buffer, quality: number): Promise<ProcessingResult> {
+  private async compressPDF(
+    buffer: Buffer,
+    quality: number,
+  ): Promise<ProcessingResult> {
     try {
       // Load the PDF document
       const pdfDoc = await PDFDocument.load(buffer);
@@ -841,11 +888,11 @@ export class PDFCompressor implements FileProcessor {
       // Basic optimization strategies based on quality setting
       if (quality < 90) {
         // Remove metadata for better compression
-        pdfDoc.setTitle('');
-        pdfDoc.setAuthor('');
-        pdfDoc.setSubject('');
-        pdfDoc.setCreator('');
-        pdfDoc.setProducer('Cloud Tools Compressor');
+        pdfDoc.setTitle("");
+        pdfDoc.setAuthor("");
+        pdfDoc.setSubject("");
+        pdfDoc.setCreator("");
+        pdfDoc.setProducer("Cloud Tools Compressor");
         pdfDoc.setKeywords([]);
       }
 
@@ -864,12 +911,12 @@ export class PDFCompressor implements FileProcessor {
 
       return {
         buffer: compressedBuffer,
-        contentType: 'application/pdf',
-        fileExtension: 'pdf',
+        contentType: "application/pdf",
+        fileExtension: "pdf",
       };
     } catch (error) {
       throw new Error(
-        `PDF compression failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `PDF compression failed: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
   }
@@ -903,9 +950,17 @@ export class PDFCompressor implements FileProcessor {
  */
 export class FFmpegVideoConverter implements FileProcessor {
   /** Supported video formats for processing */
-  private readonly supportedFormats = ['mp4', 'mov', 'avi', 'webm', 'mkv', 'flv', 'wmv'];
+  private readonly supportedFormats = [
+    "mp4",
+    "mov",
+    "avi",
+    "webm",
+    "mkv",
+    "flv",
+    "wmv",
+  ];
   /** Supported operations */
-  private readonly supportedOperations = ['convert'];
+  private readonly supportedOperations = ["convert"];
 
   /**
    * Determines if this processor can handle the given operation and format.
@@ -916,7 +971,8 @@ export class FFmpegVideoConverter implements FileProcessor {
    */
   canProcess(operation: string, format?: string): boolean {
     if (!this.supportedOperations.includes(operation)) return false;
-    if (format && !this.supportedFormats.includes(format.toLowerCase())) return false;
+    if (format && !this.supportedFormats.includes(format.toLowerCase()))
+      return false;
     return true;
   }
 
@@ -928,10 +984,13 @@ export class FFmpegVideoConverter implements FileProcessor {
    * @returns {Promise<ProcessingResult>} Processed video result
    * @throws {Error} When processing fails or unsupported operation
    */
-  async process(buffer: Buffer, message: ProcessingMessage): Promise<ProcessingResult> {
-    if (message.operation === 'convert') {
+  async process(
+    buffer: Buffer,
+    message: ProcessingMessage,
+  ): Promise<ProcessingResult> {
+    if (message.operation === "convert") {
       if (!message.targetFormat) {
-        throw new Error('Target format is required for video conversion');
+        throw new Error("Target format is required for video conversion");
       }
       return this.convertVideo(buffer, message.targetFormat, message.quality);
     }
@@ -951,18 +1010,26 @@ export class FFmpegVideoConverter implements FileProcessor {
   private async convertVideo(
     buffer: Buffer,
     targetFormat: string,
-    quality = 80
+    quality = 80,
   ): Promise<ProcessingResult> {
     const tempDir = tmpdir();
     const inputFile = join(tempDir, `input_${randomUUID()}.tmp`);
-    const outputFile = join(tempDir, `output_${randomUUID()}.${targetFormat.toLowerCase()}`);
+    const outputFile = join(
+      tempDir,
+      `output_${randomUUID()}.${targetFormat.toLowerCase()}`,
+    );
 
     try {
       // Write input buffer to temporary file
       await fs.writeFile(inputFile, buffer);
 
       // Convert video using FFmpeg
-      await this.runFFmpegConversion(inputFile, outputFile, targetFormat, quality);
+      await this.runFFmpegConversion(
+        inputFile,
+        outputFile,
+        targetFormat,
+        quality,
+      );
 
       // Read the converted file
       const resultBuffer = await fs.readFile(outputFile);
@@ -997,53 +1064,53 @@ export class FFmpegVideoConverter implements FileProcessor {
     inputFile: string,
     outputFile: string,
     format: string,
-    quality: number
+    quality: number,
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       const command = ffmpeg(inputFile);
 
       // Calculate bitrate based on quality (1000k to 8000k range)
       const videoBitrate = Math.round(1000 + (quality / 100) * 7000);
-      const audioBitrate = quality > 50 ? '128k' : '96k';
+      const audioBitrate = quality > 50 ? "128k" : "96k";
 
       // Apply format-specific settings
       switch (format.toLowerCase()) {
-        case 'mp4':
+        case "mp4":
           command
-            .videoCodec('libx264')
-            .audioCodec('aac')
+            .videoCodec("libx264")
+            .audioCodec("aac")
             .videoBitrate(`${videoBitrate}k`)
             .audioBitrate(audioBitrate)
             .addOptions([
-              '-preset',
-              'medium',
-              '-crf',
+              "-preset",
+              "medium",
+              "-crf",
               String(Math.round(51 - (quality / 100) * 28)),
             ]);
           break;
 
-        case 'webm':
+        case "webm":
           command
-            .videoCodec('libvpx-vp9')
-            .audioCodec('libopus')
+            .videoCodec("libvpx-vp9")
+            .audioCodec("libopus")
             .videoBitrate(`${videoBitrate}k`)
             .audioBitrate(audioBitrate)
-            .addOptions(['-deadline', 'good', '-cpu-used', '1']);
+            .addOptions(["-deadline", "good", "-cpu-used", "1"]);
           break;
 
-        case 'mov':
+        case "mov":
           command
-            .videoCodec('libx264')
-            .audioCodec('aac')
+            .videoCodec("libx264")
+            .audioCodec("aac")
             .videoBitrate(`${videoBitrate}k`)
             .audioBitrate(audioBitrate)
-            .addOptions(['-preset', 'medium']);
+            .addOptions(["-preset", "medium"]);
           break;
 
-        case 'avi':
+        case "avi":
           command
-            .videoCodec('libx264')
-            .audioCodec('mp3')
+            .videoCodec("libx264")
+            .audioCodec("mp3")
             .videoBitrate(`${videoBitrate}k`)
             .audioBitrate(audioBitrate);
           break;
@@ -1054,8 +1121,10 @@ export class FFmpegVideoConverter implements FileProcessor {
       }
 
       command
-        .on('end', () => resolve())
-        .on('error', error => reject(new Error(`FFmpeg conversion failed: ${error.message}`)))
+        .on("end", () => resolve())
+        .on("error", (error) =>
+          reject(new Error(`FFmpeg conversion failed: ${error.message}`)),
+        )
         .save(outputFile);
     });
   }
@@ -1069,15 +1138,15 @@ export class FFmpegVideoConverter implements FileProcessor {
    */
   private getVideoContentType(format: string): string {
     const mimeTypes: Record<string, string> = {
-      mp4: 'video/mp4',
-      webm: 'video/webm',
-      mov: 'video/quicktime',
-      avi: 'video/x-msvideo',
-      mkv: 'video/x-matroska',
-      flv: 'video/x-flv',
-      wmv: 'video/x-ms-wmv',
+      mp4: "video/mp4",
+      webm: "video/webm",
+      mov: "video/quicktime",
+      avi: "video/x-msvideo",
+      mkv: "video/x-matroska",
+      flv: "video/x-flv",
+      wmv: "video/x-ms-wmv",
     };
-    return mimeTypes[format.toLowerCase()] || 'video/mp4';
+    return mimeTypes[format.toLowerCase()] || "video/mp4";
   }
 }
 
@@ -1109,9 +1178,17 @@ export class FFmpegVideoConverter implements FileProcessor {
  */
 export class FFmpegAudioConverter implements FileProcessor {
   /** Supported audio formats for processing */
-  private readonly supportedFormats = ['mp3', 'wav', 'ogg', 'flac', 'aac', 'm4a', 'wma'];
+  private readonly supportedFormats = [
+    "mp3",
+    "wav",
+    "ogg",
+    "flac",
+    "aac",
+    "m4a",
+    "wma",
+  ];
   /** Supported operations */
-  private readonly supportedOperations = ['convert'];
+  private readonly supportedOperations = ["convert"];
 
   /**
    * Determines if this processor can handle the given operation and format.
@@ -1122,7 +1199,8 @@ export class FFmpegAudioConverter implements FileProcessor {
    */
   canProcess(operation: string, format?: string): boolean {
     if (!this.supportedOperations.includes(operation)) return false;
-    if (format && !this.supportedFormats.includes(format.toLowerCase())) return false;
+    if (format && !this.supportedFormats.includes(format.toLowerCase()))
+      return false;
     return true;
   }
 
@@ -1134,10 +1212,13 @@ export class FFmpegAudioConverter implements FileProcessor {
    * @returns {Promise<ProcessingResult>} Processed audio result
    * @throws {Error} When processing fails or unsupported operation
    */
-  async process(buffer: Buffer, message: ProcessingMessage): Promise<ProcessingResult> {
-    if (message.operation === 'convert') {
+  async process(
+    buffer: Buffer,
+    message: ProcessingMessage,
+  ): Promise<ProcessingResult> {
+    if (message.operation === "convert") {
       if (!message.targetFormat) {
-        throw new Error('Target format is required for audio conversion');
+        throw new Error("Target format is required for audio conversion");
       }
       return this.convertAudio(buffer, message.targetFormat, message.quality);
     }
@@ -1157,18 +1238,26 @@ export class FFmpegAudioConverter implements FileProcessor {
   private async convertAudio(
     buffer: Buffer,
     targetFormat: string,
-    quality = 80
+    quality = 80,
   ): Promise<ProcessingResult> {
     const tempDir = tmpdir();
     const inputFile = join(tempDir, `input_${randomUUID()}.tmp`);
-    const outputFile = join(tempDir, `output_${randomUUID()}.${targetFormat.toLowerCase()}`);
+    const outputFile = join(
+      tempDir,
+      `output_${randomUUID()}.${targetFormat.toLowerCase()}`,
+    );
 
     try {
       // Write input buffer to temporary file
       await fs.writeFile(inputFile, buffer);
 
       // Convert audio using FFmpeg
-      await this.runFFmpegAudioConversion(inputFile, outputFile, targetFormat, quality);
+      await this.runFFmpegAudioConversion(
+        inputFile,
+        outputFile,
+        targetFormat,
+        quality,
+      );
 
       // Read the converted file
       const resultBuffer = await fs.readFile(outputFile);
@@ -1203,7 +1292,7 @@ export class FFmpegAudioConverter implements FileProcessor {
     inputFile: string,
     outputFile: string,
     format: string,
-    quality: number
+    quality: number,
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       const command = ffmpeg(inputFile);
@@ -1227,37 +1316,43 @@ export class FFmpegAudioConverter implements FileProcessor {
 
       // Apply format-specific settings
       switch (format.toLowerCase()) {
-        case 'mp3':
+        case "mp3":
           command
-            .audioCodec('libmp3lame')
+            .audioCodec("libmp3lame")
             .audioBitrate(bitrate)
-            .addOptions(['-q:a', String(Math.round(9 - (quality / 100) * 9))]);
+            .addOptions(["-q:a", String(Math.round(9 - (quality / 100) * 9))]);
           break;
 
-        case 'wav':
-          command.audioCodec('pcm_s16le').addOptions(['-ar', '44100']);
+        case "wav":
+          command.audioCodec("pcm_s16le").addOptions(["-ar", "44100"]);
           break;
 
-        case 'flac':
+        case "flac":
           command
-            .audioCodec('flac')
-            .addOptions(['-compression_level', String(Math.round(((100 - quality) / 100) * 12))]);
+            .audioCodec("flac")
+            .addOptions([
+              "-compression_level",
+              String(Math.round(((100 - quality) / 100) * 12)),
+            ]);
           break;
 
-        case 'ogg':
+        case "ogg":
           command
-            .audioCodec('libvorbis')
+            .audioCodec("libvorbis")
             .audioBitrate(bitrate)
-            .addOptions(['-q:a', String(Math.round((quality / 100) * 10))]);
+            .addOptions(["-q:a", String(Math.round((quality / 100) * 10))]);
           break;
 
-        case 'aac':
-        case 'm4a':
-          command.audioCodec('aac').audioBitrate(bitrate).addOptions(['-profile:a', 'aac_low']);
+        case "aac":
+        case "m4a":
+          command
+            .audioCodec("aac")
+            .audioBitrate(bitrate)
+            .addOptions(["-profile:a", "aac_low"]);
           break;
 
-        case 'wma':
-          command.audioCodec('wmav2').audioBitrate(bitrate);
+        case "wma":
+          command.audioCodec("wmav2").audioBitrate(bitrate);
           break;
 
         default:
@@ -1266,8 +1361,10 @@ export class FFmpegAudioConverter implements FileProcessor {
       }
 
       command
-        .on('end', () => resolve())
-        .on('error', error => reject(new Error(`FFmpeg audio conversion failed: ${error.message}`)))
+        .on("end", () => resolve())
+        .on("error", (error) =>
+          reject(new Error(`FFmpeg audio conversion failed: ${error.message}`)),
+        )
         .save(outputFile);
     });
   }
@@ -1281,15 +1378,15 @@ export class FFmpegAudioConverter implements FileProcessor {
    */
   private getAudioContentType(format: string): string {
     const mimeTypes: Record<string, string> = {
-      mp3: 'audio/mpeg',
-      wav: 'audio/wav',
-      flac: 'audio/flac',
-      ogg: 'audio/ogg',
-      aac: 'audio/aac',
-      m4a: 'audio/mp4',
-      wma: 'audio/x-ms-wma',
+      mp3: "audio/mpeg",
+      wav: "audio/wav",
+      flac: "audio/flac",
+      ogg: "audio/ogg",
+      aac: "audio/aac",
+      m4a: "audio/mp4",
+      wma: "audio/x-ms-wma",
     };
-    return mimeTypes[format.toLowerCase()] || 'audio/mpeg';
+    return mimeTypes[format.toLowerCase()] || "audio/mpeg";
   }
 }
 
@@ -1321,9 +1418,17 @@ export class FFmpegAudioConverter implements FileProcessor {
  */
 export class CalibreEBookConverter implements FileProcessor {
   /** Supported eBook formats for processing */
-  private readonly supportedFormats = ['epub', 'mobi', 'azw3', 'pdf', 'txt', 'docx', 'rtf'];
+  private readonly supportedFormats = [
+    "epub",
+    "mobi",
+    "azw3",
+    "pdf",
+    "txt",
+    "docx",
+    "rtf",
+  ];
   /** Supported operations */
-  private readonly supportedOperations = ['convert'];
+  private readonly supportedOperations = ["convert"];
 
   /**
    * Determines if this processor can handle the given operation and format.
@@ -1334,7 +1439,8 @@ export class CalibreEBookConverter implements FileProcessor {
    */
   canProcess(operation: string, format?: string): boolean {
     if (!this.supportedOperations.includes(operation)) return false;
-    if (format && !this.supportedFormats.includes(format.toLowerCase())) return false;
+    if (format && !this.supportedFormats.includes(format.toLowerCase()))
+      return false;
     return true;
   }
 
@@ -1346,10 +1452,13 @@ export class CalibreEBookConverter implements FileProcessor {
    * @returns {Promise<ProcessingResult>} Processed eBook result
    * @throws {Error} When processing fails or unsupported operation
    */
-  async process(buffer: Buffer, message: ProcessingMessage): Promise<ProcessingResult> {
-    if (message.operation === 'convert') {
+  async process(
+    buffer: Buffer,
+    message: ProcessingMessage,
+  ): Promise<ProcessingResult> {
+    if (message.operation === "convert") {
       if (!message.targetFormat) {
-        throw new Error('Target format is required for eBook conversion');
+        throw new Error("Target format is required for eBook conversion");
       }
       return this.convertEBook(buffer, message.targetFormat, message.quality);
     }
@@ -1369,11 +1478,14 @@ export class CalibreEBookConverter implements FileProcessor {
   private async convertEBook(
     buffer: Buffer,
     targetFormat: string,
-    quality = 80
+    quality = 80,
   ): Promise<ProcessingResult> {
     const tempDir = tmpdir();
     const inputFile = join(tempDir, `input_${randomUUID()}.tmp`);
-    const outputFile = join(tempDir, `output_${randomUUID()}.${targetFormat.toLowerCase()}`);
+    const outputFile = join(
+      tempDir,
+      `output_${randomUUID()}.${targetFormat.toLowerCase()}`,
+    );
 
     try {
       // Write input buffer to temporary file
@@ -1383,7 +1495,12 @@ export class CalibreEBookConverter implements FileProcessor {
       await this.checkCalibreAvailable();
 
       // Convert eBook using Calibre
-      await this.runCalibreConversion(inputFile, outputFile, targetFormat, quality);
+      await this.runCalibreConversion(
+        inputFile,
+        outputFile,
+        targetFormat,
+        quality,
+      );
 
       // Read the converted file
       const resultBuffer = await fs.readFile(outputFile);
@@ -1395,7 +1512,10 @@ export class CalibreEBookConverter implements FileProcessor {
       };
     } catch (error) {
       // If Calibre is not available, try basic format handling for some formats
-      if (error instanceof Error && error.message.includes('Calibre not available')) {
+      if (
+        error instanceof Error &&
+        error.message.includes("Calibre not available")
+      ) {
         return this.handleBasicEBookConversion(buffer, targetFormat);
       }
       throw error;
@@ -1419,9 +1539,11 @@ export class CalibreEBookConverter implements FileProcessor {
    */
   private async checkCalibreAvailable(): Promise<void> {
     try {
-      await execAsync('ebook-convert --version');
+      await execAsync("ebook-convert --version");
     } catch {
-      throw new Error('Calibre not available. Please install Calibre with ebook-convert command.');
+      throw new Error(
+        "Calibre not available. Please install Calibre with ebook-convert command.",
+      );
     }
   }
 
@@ -1439,48 +1561,48 @@ export class CalibreEBookConverter implements FileProcessor {
     inputFile: string,
     outputFile: string,
     format: string,
-    quality: number
+    quality: number,
   ): Promise<void> {
     const options: string[] = [];
 
     // Add format-specific options based on quality
     switch (format.toLowerCase()) {
-      case 'epub':
-        options.push('--epub-version=3');
+      case "epub":
+        options.push("--epub-version=3");
         if (quality > 70) {
-          options.push('--preserve-cover-aspect-ratio');
-          options.push('--epub-flatten');
+          options.push("--preserve-cover-aspect-ratio");
+          options.push("--epub-flatten");
         }
         break;
 
-      case 'mobi':
-      case 'azw3':
+      case "mobi":
+      case "azw3":
         if (quality < 50) {
-          options.push('--mobi-file-type=old');
+          options.push("--mobi-file-type=old");
         }
-        options.push('--mobi-toc-at-start');
+        options.push("--mobi-toc-at-start");
         break;
 
-      case 'pdf':
-        options.push('--pdf-engine=reportlab');
+      case "pdf":
+        options.push("--pdf-engine=reportlab");
         if (quality > 60) {
-          options.push('--pdf-serif-family=Times');
-          options.push('--pdf-sans-family=Helvetica');
+          options.push("--pdf-serif-family=Times");
+          options.push("--pdf-sans-family=Helvetica");
         }
         break;
     }
 
     // Build the command
-    const command = `ebook-convert "${inputFile}" "${outputFile}" ${options.join(' ')}`;
+    const command = `ebook-convert "${inputFile}" "${outputFile}" ${options.join(" ")}`;
 
     try {
       const { stderr } = await execAsync(command, { timeout: 300000 }); // 5 minute timeout
-      if (stderr && !stderr.includes('WARNING')) {
+      if (stderr && !stderr.includes("WARNING")) {
         throw new Error(`Calibre conversion error: ${stderr}`);
       }
     } catch (error) {
       throw new Error(
-        `Calibre conversion failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `Calibre conversion failed: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
     }
   }
@@ -1495,28 +1617,28 @@ export class CalibreEBookConverter implements FileProcessor {
    */
   private async handleBasicEBookConversion(
     buffer: Buffer,
-    targetFormat: string
+    targetFormat: string,
   ): Promise<ProcessingResult> {
     // For now, we'll just return the original buffer with updated metadata
     // This is a fallback when Calibre is not available
     // In a production system, you might want to implement basic format detection
     // and conversion for simple text-based formats
 
-    if (targetFormat.toLowerCase() === 'txt') {
+    if (targetFormat.toLowerCase() === "txt") {
       // Simple conversion to plain text (strip HTML/formatting)
-      let content = buffer.toString('utf8');
+      let content = buffer.toString("utf8");
 
       // Basic HTML tag removal for simple cases
-      content = content.replace(/<[^>]*>/g, '');
-      content = content.replace(/&nbsp;/g, ' ');
-      content = content.replace(/&amp;/g, '&');
-      content = content.replace(/&lt;/g, '<');
-      content = content.replace(/&gt;/g, '>');
+      content = content.replace(/<[^>]*>/g, "");
+      content = content.replace(/&nbsp;/g, " ");
+      content = content.replace(/&amp;/g, "&");
+      content = content.replace(/&lt;/g, "<");
+      content = content.replace(/&gt;/g, ">");
 
       return {
-        buffer: Buffer.from(content, 'utf8'),
-        contentType: this.getEBookContentType('txt'),
-        fileExtension: 'txt',
+        buffer: Buffer.from(content, "utf8"),
+        contentType: this.getEBookContentType("txt"),
+        fileExtension: "txt",
       };
     }
 
@@ -1537,15 +1659,15 @@ export class CalibreEBookConverter implements FileProcessor {
    */
   private getEBookContentType(format: string): string {
     const mimeTypes: Record<string, string> = {
-      epub: 'application/epub+zip',
-      mobi: 'application/x-mobipocket-ebook',
-      azw3: 'application/vnd.amazon.ebook',
-      pdf: 'application/pdf',
-      txt: 'text/plain',
-      docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      rtf: 'application/rtf',
+      epub: "application/epub+zip",
+      mobi: "application/x-mobipocket-ebook",
+      azw3: "application/vnd.amazon.ebook",
+      pdf: "application/pdf",
+      txt: "text/plain",
+      docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      rtf: "application/rtf",
     };
-    return mimeTypes[format.toLowerCase()] || 'application/octet-stream';
+    return mimeTypes[format.toLowerCase()] || "application/octet-stream";
   }
 }
 
@@ -1672,7 +1794,7 @@ export class QueueWorker {
     private fileStorage: FileStorage,
     private jobStatusUpdater: JobStatusUpdater,
     private logger: Logger,
-    private pollIntervalMs: number = 5000
+    private pollIntervalMs: number = 5000,
   ) {}
 
   /**
@@ -1701,18 +1823,18 @@ export class QueueWorker {
    */
   async start(): Promise<void> {
     if (this.isRunning) {
-      this.logger.warn('Worker is already running');
+      this.logger.warn("Worker is already running");
       return;
     }
 
     this.isRunning = true;
-    this.logger.info('Starting file processing worker...');
+    this.logger.info("Starting file processing worker...");
 
     while (this.isRunning) {
       try {
         await this.processBatch();
       } catch (error) {
-        this.logger.error('Error in worker loop', error);
+        this.logger.error("Error in worker loop", error);
       }
 
       await this.sleep(this.pollIntervalMs);
@@ -1726,7 +1848,7 @@ export class QueueWorker {
    * The worker will finish processing the current batch before stopping.
    */
   stop(): void {
-    this.logger.info('Stopping file processing worker...');
+    this.logger.info("Stopping file processing worker...");
     this.isRunning = false;
   }
 
@@ -1760,7 +1882,7 @@ export class QueueWorker {
    */
   private async processMessage(message: Message): Promise<void> {
     if (!message.Body || !message.ReceiptHandle) {
-      this.logger.warn('Invalid message received');
+      this.logger.warn("Invalid message received");
       return;
     }
 
@@ -1773,13 +1895,17 @@ export class QueueWorker {
 
       this.logger.info(`Job completed: ${processingMessage.jobId}`);
     } catch (error) {
-      this.logger.error('Error processing message', error);
+      this.logger.error("Error processing message", error);
 
       try {
         const processingMessage: ProcessingMessage = JSON.parse(message.Body!);
-        await this.jobStatusUpdater.updateStatus(processingMessage.jobId, JobStatus.FAILED, 0);
+        await this.jobStatusUpdater.updateStatus(
+          processingMessage.jobId,
+          JobStatus.FAILED,
+          0,
+        );
       } catch {
-        this.logger.error('Could not parse message to update status');
+        this.logger.error("Could not parse message to update status");
       }
 
       // Delete message to prevent reprocessing
@@ -1809,38 +1935,58 @@ export class QueueWorker {
     const processor = this.findProcessor(message);
     if (!processor) {
       throw new Error(
-        `No processor found for operation: ${message.operation}, format: ${message.targetFormat}`
+        `No processor found for operation: ${message.operation}, format: ${message.targetFormat}`,
       );
     }
 
-    await this.jobStatusUpdater.updateStatus(message.jobId, JobStatus.PROCESSING, 0);
+    await this.jobStatusUpdater.updateStatus(
+      message.jobId,
+      JobStatus.PROCESSING,
+      0,
+    );
 
     // Get job record from DynamoDB to retrieve the correct S3 key
     const jobRecord = await this.getJobRecord(message.jobId);
     if (!jobRecord || !jobRecord.s3Key) {
-      throw new Error(`Job record not found or missing S3 key for job: ${message.jobId}`);
+      throw new Error(
+        `Job record not found or missing S3 key for job: ${message.jobId}`,
+      );
     }
 
     // Get original file using the correct S3 key from the job record
-    const originalBuffer = await this.fileStorage.getFile(jobRecord.s3Key as string);
+    const originalBuffer = await this.fileStorage.getFile(
+      jobRecord.s3Key as string,
+    );
     const originalFileSize = originalBuffer.length;
-    await this.jobStatusUpdater.updateStatus(message.jobId, JobStatus.PROCESSING, 25);
+    await this.jobStatusUpdater.updateStatus(
+      message.jobId,
+      JobStatus.PROCESSING,
+      25,
+    );
 
     // Process file
     const result = await processor.process(originalBuffer, message);
     const processedFileSize = result.buffer.length;
-    await this.jobStatusUpdater.updateStatus(message.jobId, JobStatus.PROCESSING, 75);
+    await this.jobStatusUpdater.updateStatus(
+      message.jobId,
+      JobStatus.PROCESSING,
+      75,
+    );
 
     // Calculate compression savings if this is a compression operation
     let compressionData: Record<string, unknown> | undefined;
-    if (message.operation === 'compress') {
+    if (message.operation === "compress") {
       const savingsBytes = originalFileSize - processedFileSize;
-      const savingsPercentage = originalFileSize > 0 ? (savingsBytes / originalFileSize) * 100 : 0;
+      const savingsPercentage =
+        originalFileSize > 0 ? (savingsBytes / originalFileSize) * 100 : 0;
 
       compressionData = {
         originalFileSize,
         processedFileSize,
-        compressionSavings: Math.max(0, Math.round(savingsPercentage * 100) / 100), // Round to 2 decimal places, ensure non-negative
+        compressionSavings: Math.max(
+          0,
+          Math.round(savingsPercentage * 100) / 100,
+        ), // Round to 2 decimal places, ensure non-negative
       };
 
       this.logger.info(`Compression achieved for job ${message.jobId}:`, {
@@ -1852,7 +1998,11 @@ export class QueueWorker {
 
     // Upload processed file
     const outputKey = this.generateOutputKey(message, result.fileExtension);
-    await this.fileStorage.putFile(outputKey, result.buffer, result.contentType);
+    await this.fileStorage.putFile(
+      outputKey,
+      result.buffer,
+      result.contentType,
+    );
 
     const downloadUrl = this.fileStorage.generateDownloadUrl(outputKey);
     await this.jobStatusUpdater.updateStatus(
@@ -1860,7 +2010,7 @@ export class QueueWorker {
       JobStatus.PROCESSING,
       90,
       downloadUrl,
-      compressionData
+      compressionData,
     );
 
     // Mark as completed with compression data
@@ -1869,7 +2019,7 @@ export class QueueWorker {
       JobStatus.COMPLETED,
       100,
       downloadUrl,
-      compressionData
+      compressionData,
     );
   }
 
@@ -1884,7 +2034,11 @@ export class QueueWorker {
    * @returns {FileProcessor | null} First processor that can handle the job, or null if none found
    */
   private findProcessor(message: ProcessingMessage): FileProcessor | null {
-    return this.processors.find(p => p.canProcess(message.operation, message.targetFormat)) || null;
+    return (
+      this.processors.find((p) =>
+        p.canProcess(message.operation, message.targetFormat),
+      ) || null
+    );
   }
 
   /**
@@ -1905,8 +2059,11 @@ export class QueueWorker {
    * // For compression: "processed/job-123_compressed.jpg"
    * ```
    */
-  private generateOutputKey(message: ProcessingMessage, fileExtension: string): string {
-    if (message.operation === 'compress') {
+  private generateOutputKey(
+    message: ProcessingMessage,
+    fileExtension: string,
+  ): string {
+    if (message.operation === "compress") {
       return `processed/${message.jobId}_compressed.${fileExtension}`;
     } else {
       return `processed/${message.jobId}.${fileExtension}`;
@@ -1950,7 +2107,7 @@ export class QueueWorker {
    * @returns {Promise<void>} Promise that resolves after the specified duration
    */
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
 
@@ -2009,7 +2166,12 @@ export async function createFileProcessingWorker(): Promise<QueueWorker> {
   const logger = new ConsoleLogger();
 
   // Create worker with dependencies injected
-  const worker = new QueueWorker(messageQueue, fileStorage, jobStatusUpdater, logger);
+  const worker = new QueueWorker(
+    messageQueue,
+    fileStorage,
+    jobStatusUpdater,
+    logger,
+  );
 
   // Add processors
   worker.addProcessor(new SharpImageConverter());
@@ -2018,15 +2180,15 @@ export async function createFileProcessingWorker(): Promise<QueueWorker> {
   worker.addProcessor(new FFmpegAudioConverter());
   worker.addProcessor(new CalibreEBookConverter());
 
-  logger.info('Worker initialized', {
+  logger.info("Worker initialized", {
     queueUrl,
     bucketName,
     processors: [
-      'SharpImageConverter',
-      'PDFCompressor',
-      'FFmpegVideoConverter',
-      'FFmpegAudioConverter',
-      'CalibreEBookConverter',
+      "SharpImageConverter",
+      "PDFCompressor",
+      "FFmpegVideoConverter",
+      "FFmpegAudioConverter",
+      "CalibreEBookConverter",
     ],
   });
 

@@ -1,12 +1,12 @@
-version: "3.8"
+version: '3.8'
 
 services:
   localstack:
     image: localstack/localstack:latest
     container_name: cloud-tools-localstack
     ports:
-      - "4566:4566" # edge port for all services
-      - "4510-4559:4510-4559" # external services range (optional)
+      - '4566:4566' # edge port for all services
+      - '4510-4559:4510-4559' # external services range (optional)
     environment:
       - SERVICES=s3,sqs,dynamodb,lambda,cloudwatch,logs
       - DEBUG=1
@@ -14,9 +14,9 @@ services:
       - LS_LOG=warning
       - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "localstack_data:/var/lib/localstack"
-      - "./.localstack:/etc/localstack/init/ready.d" # optional init scripts directory
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - 'localstack_data:/var/lib/localstack'
+      - './.localstack:/etc/localstack/init/ready.d' # optional init scripts directory
 
 volumes:
   localstack_data:

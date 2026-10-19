@@ -1,16 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import {
-  PutCommand,
-  GetCommand,
-  ScanCommand,
-  UpdateCommand,
-} from "@aws-sdk/lib-dynamodb";
-import {
-  docClient,
-  AWS_RESOURCES,
-  JobStatus,
-  JobType,
-} from "@/root-lib/aws-config";
+import { NextRequest, NextResponse } from 'next/server';
+import { PutCommand, GetCommand, ScanCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import { docClient, AWS_RESOURCES, JobStatus, JobType } from '@/root-lib/aws-config';
 
 export interface Job {
   jobId: string;
@@ -18,7 +8,7 @@ export interface Job {
   fileSize: number;
   fileType: string;
   s3Key: string;
-  operation: "convert" | "compress";
+  operation: 'convert' | 'compress';
   targetFormat?: string;
   jobType: JobType;
   status: JobStatus;
@@ -38,7 +28,7 @@ export interface Job {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const jobId = searchParams.get("jobId");
+    const jobId = searchParams.get('jobId');
 
     if (jobId) {
       // Get specific job
@@ -50,7 +40,7 @@ export async function GET(request: NextRequest) {
       const result = await docClient.send(command);
 
       if (!result.Item) {
-        return NextResponse.json({ error: "Job not found" }, { status: 404 });
+        return NextResponse.json({ error: 'Job not found' }, { status: 404 });
       }
 
       return NextResponse.json({
@@ -59,16 +49,16 @@ export async function GET(request: NextRequest) {
       });
     } else {
       // List all jobs (with optional filtering)
-      const status = searchParams.get("status") as JobStatus;
-      const limit = parseInt(searchParams.get("limit") || "50");
+      const status = searchParams.get('status') as JobStatus;
+      const limit = parseInt(searchParams.get('limit') || '50');
 
       const command = new ScanCommand({
         TableName: AWS_RESOURCES.DYNAMODB_TABLE,
         Limit: limit,
         ...(status && {
-          FilterExpression: "#status = :status",
-          ExpressionAttributeNames: { "#status": "status" },
-          ExpressionAttributeValues: { ":status": status },
+          FilterExpression: '#status = :status',
+          ExpressionAttributeNames: { '#status': 'status' },
+          ExpressionAttributeValues: { ':status': status },
         }),
       });
 
@@ -81,13 +71,13 @@ export async function GET(request: NextRequest) {
       });
     }
   } catch (error) {
-    console.error("Get jobs error:", error);
+    console.error('Get jobs error:', error);
     return NextResponse.json(
       {
-        error: "Failed to retrieve jobs",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to retrieve jobs',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -96,22 +86,10 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const {
-      jobId,
-      fileName,
-      fileSize,
-      fileType,
-      s3Key,
-      operation,
-      targetFormat,
-      jobType,
-    } = body;
+    const { jobId, fileName, fileSize, fileType, s3Key, operation, targetFormat, jobType } = body;
 
     if (!jobId || !fileName || !s3Key || !operation || !jobType) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     const now = new Date().toISOString();
@@ -119,7 +97,7 @@ export async function POST(request: NextRequest) {
       jobId,
       fileName,
       fileSize: fileSize || 0,
-      fileType: fileType || "",
+      fileType: fileType || '',
       s3Key,
       operation,
       targetFormat,
@@ -142,13 +120,13 @@ export async function POST(request: NextRequest) {
       data: job,
     });
   } catch (error) {
-    console.error("Create job error:", error);
+    console.error('Create job error:', error);
     return NextResponse.json(
       {
-        error: "Failed to create job",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to create job',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -169,10 +147,7 @@ export async function PUT(request: NextRequest) {
     } = body;
 
     if (!jobId) {
-      return NextResponse.json(
-        { error: "Job ID is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: 'Job ID is required' }, { status: 400 });
     }
 
     const updateExpression: string[] = [];
@@ -180,62 +155,62 @@ export async function PUT(request: NextRequest) {
     const expressionAttributeNames: Record<string, string> = {};
 
     // Always update the updatedAt timestamp
-    updateExpression.push("#updatedAt = :updatedAt");
-    expressionAttributeNames["#updatedAt"] = "updatedAt";
-    expressionAttributeValues[":updatedAt"] = new Date().toISOString();
+    updateExpression.push('#updatedAt = :updatedAt');
+    expressionAttributeNames['#updatedAt'] = 'updatedAt';
+    expressionAttributeValues[':updatedAt'] = new Date().toISOString();
 
     if (status) {
-      updateExpression.push("#status = :status");
-      expressionAttributeNames["#status"] = "status";
-      expressionAttributeValues[":status"] = status;
+      updateExpression.push('#status = :status');
+      expressionAttributeNames['#status'] = 'status';
+      expressionAttributeValues[':status'] = status;
 
       // If status is completed, set completedAt
       if (status === JobStatus.COMPLETED) {
-        updateExpression.push("completedAt = :completedAt");
-        expressionAttributeValues[":completedAt"] = new Date().toISOString();
+        updateExpression.push('completedAt = :completedAt');
+        expressionAttributeValues[':completedAt'] = new Date().toISOString();
       }
     }
 
     if (progress !== undefined) {
-      updateExpression.push("progress = :progress");
-      expressionAttributeValues[":progress"] = progress;
+      updateExpression.push('progress = :progress');
+      expressionAttributeValues[':progress'] = progress;
     }
 
     if (downloadUrl) {
-      updateExpression.push("downloadUrl = :downloadUrl");
-      expressionAttributeValues[":downloadUrl"] = downloadUrl;
+      updateExpression.push('downloadUrl = :downloadUrl');
+      expressionAttributeValues[':downloadUrl'] = downloadUrl;
     }
 
     if (errorMessage) {
-      updateExpression.push("errorMessage = :errorMessage");
-      expressionAttributeValues[":errorMessage"] = errorMessage;
+      updateExpression.push('errorMessage = :errorMessage');
+      expressionAttributeValues[':errorMessage'] = errorMessage;
     }
 
     // Compression savings tracking
     if (originalFileSize !== undefined) {
-      updateExpression.push("originalFileSize = :originalFileSize");
-      expressionAttributeValues[":originalFileSize"] = originalFileSize;
+      updateExpression.push('originalFileSize = :originalFileSize');
+      expressionAttributeValues[':originalFileSize'] = originalFileSize;
     }
 
     if (processedFileSize !== undefined) {
-      updateExpression.push("processedFileSize = :processedFileSize");
-      expressionAttributeValues[":processedFileSize"] = processedFileSize;
+      updateExpression.push('processedFileSize = :processedFileSize');
+      expressionAttributeValues[':processedFileSize'] = processedFileSize;
     }
 
     if (compressionSavings !== undefined) {
-      updateExpression.push("compressionSavings = :compressionSavings");
-      expressionAttributeValues[":compressionSavings"] = compressionSavings;
+      updateExpression.push('compressionSavings = :compressionSavings');
+      expressionAttributeValues[':compressionSavings'] = compressionSavings;
     }
 
     const command = new UpdateCommand({
       TableName: AWS_RESOURCES.DYNAMODB_TABLE,
       Key: { jobId },
-      UpdateExpression: `SET ${updateExpression.join(", ")}`,
+      UpdateExpression: `SET ${updateExpression.join(', ')}`,
       ExpressionAttributeNames: Object.keys(expressionAttributeNames).length
         ? expressionAttributeNames
         : undefined,
       ExpressionAttributeValues: expressionAttributeValues,
-      ReturnValues: "ALL_NEW",
+      ReturnValues: 'ALL_NEW',
     });
 
     const result = await docClient.send(command);
@@ -245,13 +220,13 @@ export async function PUT(request: NextRequest) {
       data: result.Attributes as Job,
     });
   } catch (error) {
-    console.error("Update job error:", error);
+    console.error('Update job error:', error);
     return NextResponse.json(
       {
-        error: "Failed to update job",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to update job',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

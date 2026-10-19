@@ -1,0 +1,13 @@
+node_modules
+.next
+coverage
+.flox
+.website-studio
+**/.terraform
+**/dist
+**/next-env.d.ts
+bun.lock
+*.svg
+.idea
+playwright-report
+test-results

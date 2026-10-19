@@ -1,48 +1,47 @@
-import React from "react";
-import { Inter } from "next/font/google";
-import { Toaster } from "@/components/ui/toaster";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
-import { ThemeProvider } from "@/components/theme-provider";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { AnimatePresence } from "framer-motion";
-
-import "@/styles/globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata = {
-  title: "Cloud - Cloud Tools for Developers",
+import type { Metadata } from 'next';
+import localFont from 'next/font/local';
+import { Toaster } from '@/components/ui/toaster';
+import Header from '@/components/header';
+import Footer from '@/components/footer';
+import '@/styles/globals.css';
+import '@/styles/site.css';
+const geist = localFont({ src: './fonts/GeistVF.woff', display: 'swap' });
+export const metadata: Metadata = {
+  title: { default: 'Cloud Tools — A new format. A lighter file.', template: '%s · Cloud Tools' },
   description:
-    "Cloud is a collection of tools for developers to help them build better applications.",
+    'Convert images, audio, video and eBooks. Compress images and PDFs. A practical, self-hostable file toolbox from Smeltery.',
+  openGraph: {
+    title: 'Cloud Tools — A new format. A lighter file.',
+    description: 'Six practical file tools. One place to get things done.',
+    images: [
+      {
+        url: 'https://raw.githubusercontent.com/smeltery/cloud-tools/master/client/public/og.png',
+        width: 1200,
+        height: 630,
+        alt: 'Cloud Tools: a new format, a lighter file',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['https://raw.githubusercontent.com/smeltery/cloud-tools/master/client/public/og.png'],
+  },
+  icons: { icon: '/logo.svg' },
 };
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body
-        className={`${inter.className} flex flex-col min-h-screen`}
-        suppressHydrationWarning
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Header>
-            <ThemeToggle />
-          </Header>
-          <AnimatePresence mode="wait">
-            <main className="bg-secondary flex-grow">{children}</main>
-          </AnimatePresence>
-          <Footer />
-          <Toaster />
-        </ThemeProvider>
+    <html lang="en" data-scroll-behavior="smooth">
+      <body className={geist.className} id="top">
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
+        <Header />
+        <main id="main" className="site-main">
+          {children}
+        </main>
+        <Footer />
+        <Toaster />
       </body>
     </html>
   );
