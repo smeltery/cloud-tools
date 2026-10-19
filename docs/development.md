@@ -23,6 +23,12 @@ bun run test:e2e
 
 `check` runs formatting, ESLint, TypeScript checks, Markdown and Mermaid validation, and the LOC budget. Pre-commit runs the same check command; pre-push also runs coverage, builds, browser tests, and security checks. CI adds infrastructure validation, dependency auditing, and browser journeys. Run `bun run check:infra` inside Flox for the infrastructure checks.
 
+## Compiler and lint compatibility
+
+Type checks and Lambda compilation invoke TypeScript 7 explicitly through the `@typescript/native` package alias. The `typescript` dependency retains the TypeScript 6 API for Next.js and ESLint integrations that still need it, following the [TypeScript migration guidance](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0). Explicit compiler paths avoid ambiguity between the two packages’ `tsc` executables under Bun.
+
+ESLint 10 retains the existing Next.js, React, and TypeScript rules through `@eslint/compat`. Remove the wrapper when those plugins support the current rule API directly; do not disable rules to work around compatibility errors.
+
 ## Edit documentation
 
 Edit the matching file in `docs/`. Add a catalog entry in `client/lib/catalog.ts` for new public pages. Relative Markdown links resolve to documentation routes; second-level headings supply the table of contents. Mermaid code fences are checked by the same parser used by the browser.

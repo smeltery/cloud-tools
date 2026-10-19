@@ -12,12 +12,12 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "compile": "tsc",
+    "compile": "node ../../../../node_modules/@typescript/native/bin/tsc",
     "build": "npm run clean && npm run compile",
     "bundle": "npm run build && node build.js",
     "package": "npm run bundle && ./package.sh",
     "build-ts": "../scripts/build-lambda-ts.sh",
-    "type-check": "tsc --noEmit",
-    "dev": "tsc --watch --noEmit"
+    "type-check": "node ../../../../node_modules/@typescript/native/bin/tsc --noEmit",
+    "dev": "node ../../../../node_modules/@typescript/native/bin/tsc --watch --noEmit"
   }
 }
