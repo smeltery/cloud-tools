@@ -14,7 +14,7 @@ export default function AboutPage() {
         <h1>
           Less file friction.
           <br />
-          <em>More getting on with it.</em>
+          <em>More useful files.</em>
         </h1>
         <p>
           Cloud Tools brings six everyday file tasks into one place: image, audio, video, and eBook
