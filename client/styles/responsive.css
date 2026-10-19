@@ -184,3 +184,28 @@
     transition-duration: 0.01ms !important;
   }
 }
+@media (max-width: 360px) {
+  .header-inner {
+    padding-inline: 9px;
+  }
+  .header-inner .brand {
+    font-size: 12px;
+    gap: 5px;
+  }
+  .header-inner .brand svg {
+    width: 24px;
+  }
+  .header-search-trigger {
+    padding: 7px;
+  }
+  .menu-toggle {
+    padding-inline: 6px;
+  }
+  .docs-header-inner {
+    padding-inline: 12px;
+    gap: 8px;
+  }
+  .docs-header .brand {
+    font-size: 12px;
+  }
+}

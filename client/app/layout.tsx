@@ -7,6 +7,10 @@ import '@/styles/globals.css';
 import '@/styles/site.css';
 const geist = localFont({ src: './fonts/GeistVF.woff', display: 'swap' });
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
+  ),
   title: { default: 'Cloud Tools — A new format. A lighter file.', template: '%s · Cloud Tools' },
   description:
     'Convert images, audio, video and eBooks. Compress images and PDFs. A practical, self-hostable file toolbox from Smeltery.',
@@ -15,7 +19,7 @@ export const metadata: Metadata = {
     description: 'Six practical file tools. One place to get things done.',
     images: [
       {
-        url: 'https://raw.githubusercontent.com/smeltery/cloud-tools/master/client/public/og.png',
+        url: '/og.png',
         width: 1200,
         height: 630,
         alt: 'Cloud Tools: a new format, a lighter file',
@@ -25,7 +29,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['https://raw.githubusercontent.com/smeltery/cloud-tools/master/client/public/og.png'],
+    images: ['/og.png'],
   },
   icons: { icon: '/logo.svg' },
 };
