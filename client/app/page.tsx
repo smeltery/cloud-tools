@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Cloud, Upload, SlidersHorizontal, Download, Check } from 'lucide-react';
+import { EverydayTasks, HomeGuidance } from '@/components/home-extras';
 import { tools } from '@/lib/catalog';
 export default function Home() {
   return (
@@ -98,6 +99,7 @@ export default function Home() {
           ))}
         </div>
       </section>
+      <EverydayTasks />
       <section className="how-section">
         <div className="wrap how-grid">
           <div>
@@ -173,6 +175,7 @@ export default function Home() {
           ))}
         </div>
       </section>
+      <HomeGuidance />
     </>
   );
 }
