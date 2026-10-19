@@ -13,17 +13,27 @@ Convert images, audio, video, and eBooks. Compress images and PDFs. A practical,
 
 ![Cloud Tools — a new format, a lighter file](client/public/og.png)
 
-A Next.js interface submits jobs to SQS. A TypeScript worker processes files with Sharp, FFmpeg, Calibre, and pdf-lib; S3 stores files and DynamoDB tracks jobs. Terraform defines the infrastructure, and LocalStack supports local development.
+## Use the tools
 
-## Start
+1. Choose an image, audio, video, or eBook converter—or image/PDF compression.
+2. Upload a file and choose its output format, or start compression.
+3. Follow the job’s progress and download the finished file. Keep your original until you’ve checked the result.
+
+Files are processed by the installation’s worker, not entirely in your browser. See [formats](docs/formats.md), [jobs and downloads](docs/jobs.md), and [file handling](docs/conversion.md).
+
+## Run locally
+
+Install [Flox](https://flox.dev/docs/install-flox/), then:
 
 ```sh
+git clone https://github.com/smeltery/cloud-tools.git
+cd cloud-tools
 flox activate
 bun install --frozen-lockfile
 bun run dev
 ```
 
-The interface opens at `http://localhost:3000`. Real conversions also need the backend and worker: follow the [quick start](docs/quick-start.md).
+Open `http://localhost:3000` to preview the interface. **For working uploads and conversions**, follow the [quick start](docs/quick-start.md) to start Docker/LocalStack, provision storage and queues, and run the worker. See [self-hosting](docs/deployment.md) for AWS deployment.
 
 ## Documentation
 
