@@ -195,7 +195,7 @@ export default function ConversionHistory({ storageKey }: ConversionHistoryProps
           </div>
         </div>
         <CardContent className="p-0">
-          <ScrollArea className="h-[520px]">
+          <ScrollArea className="h-[280px] md:h-[520px]">
             {history.length === 0 ? (
               <motion.p
                 className="text-center text-muted-foreground p-4"

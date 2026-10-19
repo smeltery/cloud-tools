@@ -81,7 +81,9 @@ test("upload reports failure and preserves file for retry", async ({
   await page
     .getByRole("button", { name: "Convert image", exact: true })
     .click();
-  await expect(page.getByText("Storage unavailable")).toBeVisible();
+  await expect(
+    page.getByText("Storage unavailable", { exact: true }),
+  ).toBeVisible();
   await expect(page.locator('input[type="file"]')).not.toHaveValue("");
   await expect(
     page.getByRole("button", { name: "Convert image", exact: true }),
