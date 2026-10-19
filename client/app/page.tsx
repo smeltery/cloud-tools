@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { EverydayTasks, HomeGuidance } from '@/components/home-extras';
 import { tools } from '@/lib/catalog';
+import { ToolCards } from '@/components/tool-cards';
 export default function Home() {
   return (
     <>
@@ -92,24 +93,7 @@ export default function Home() {
             We’ll help with the next format.
           </p>
         </div>
-        <div className="tool-grid">
-          {tools.map((tool, index) => (
-            <Link className="tool-card" key={tool.href} href={tool.href}>
-              <div className="tool-card-top">
-                <tool.icon size={27} strokeWidth={1.5} />
-                <span>
-                  0{index + 1} / {tool.category}
-                </span>
-              </div>
-              <h3>{tool.title}</h3>
-              <p>{tool.description}</p>
-              <div className="tool-card-bottom">
-                <small>{tool.formats}</small>
-                <span className="tool-open">Open tool</span>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <ToolCards />
       </section>
       <EverydayTasks />
       <section className="how-section">

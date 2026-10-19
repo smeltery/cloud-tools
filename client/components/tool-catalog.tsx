@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { tools } from '@/lib/catalog';
+import { ToolCards } from './tool-cards';
 import { NextStep, Questions } from './next-step';
 export function ToolCatalog({ category }: { category: 'Convert' | 'Compress' }) {
   const converting = category === 'Convert';
@@ -46,24 +46,7 @@ export function ToolCatalog({ category }: { category: 'Convert' | 'Compress' }) 
             Check supported formats
           </Link>
         </div>
-        <div className="tool-grid catalog-grid">
-          {tools
-            .filter(t => t.category === category)
-            .map(tool => (
-              <Link key={tool.href} href={tool.href} className="tool-card">
-                <div className="tool-card-top">
-                  <tool.icon size={28} />
-                  <span>{category}</span>
-                </div>
-                <h3>{tool.title}</h3>
-                <p>{tool.description}</p>
-                <div className="tool-card-bottom">
-                  <small>{tool.formats}</small>
-                  <span className="tool-open">Open tool</span>
-                </div>
-              </Link>
-            ))}
-        </div>
+        <ToolCards category={category} />
       </section>
       <section className="editorial-section">
         <div className="section-heading">
