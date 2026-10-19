@@ -5,7 +5,7 @@ export default function Page() {
     <PolicyPage
       kind="Privacy"
       title="Know where your files go."
-      intro="A practical guide to what this software stores, where processing happens, and what to ask your installation\u2019s operator."
+      intro="A practical guide to what this software stores, where processing happens, and what to ask your installation’s operator."
       sections={[
         {
           title: 'Uploads and processing',
