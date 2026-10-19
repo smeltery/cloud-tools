@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { guides } from '@/lib/catalog';
 import { readGuide } from '@/lib/docs';
+import { DocsCodeCopy } from '@/components/docs-code-copy';
+import '@/styles/docs-code.css';
 import { DocsActions } from '@/components/docs-actions';
 import { DocsDiagrams } from '@/components/docs-diagrams';
 import { GitHubIcon } from '@/components/github-icon';
@@ -53,10 +55,31 @@ export default async function DocsPage({ params }: Props) {
         {nav}
       </details>
       <article className="docs-article">
-        <p className="docs-group">{guide.group}</p>
-        <h1>{guide.title}</h1>
+        <p className="docs-group">{slug === 'api' ? 'DEVELOPER DOCUMENTATION' : guide.group}</p>
+        <h1>
+          {slug === 'api' ? (
+            <>
+              Files in.
+              <br />
+              <em>Possibilities out.</em>
+            </>
+          ) : (
+            guide.title
+          )}
+        </h1>
+        <details className="docs-mobile-toc">
+          <summary>On this page</summary>
+          <nav aria-label="Article sections">
+            {guide.headings.map(h => (
+              <a key={h.id} href={`#${h.id}`}>
+                {h.title}
+              </a>
+            ))}
+          </nav>
+        </details>
         <div dangerouslySetInnerHTML={{ __html: guide.html }} />
         <DocsDiagrams slug={slug} />
+        <DocsCodeCopy />
         <nav className="docs-pagination" aria-label="Adjacent pages">
           {index > 0 && (
             <Link href={`/docs/${guides[index - 1].slug}`}>

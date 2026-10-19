@@ -1,6 +1,10 @@
 # API reference
 
-Submit a file, queue its processing, and read the result from the same installation.
+The Cloud Tools API brings file conversion to your own applications. Upload a file, queue its processing, and download the result.
+
+> Self-hosted and intended for a private installation. API requests upload files to your configured installation. Add an authenticated gateway before exposing these routes.
+
+<div class="api-base"><span>Next.js API · local development</span><code>http://localhost:3000</code></div>
 
 ## Base URL and access
 
@@ -11,7 +15,10 @@ Use the origin serving your Next.js app, such as `http://localhost:3000` for dev
 `POST /api/upload` accepts multipart form data: `file`, `operation` (`convert` or `compress`), and optional `targetFormat`.
 
 ```sh
-curl --fail-with-body http://localhost:3000/api/upload   -F file=@example.png   -F operation=convert   -F targetFormat=webp
+curl --fail-with-body "http://localhost:3000/api/upload" \
+  -F "file=@example.png" \
+  -F "operation=convert" \
+  -F "targetFormat=webp"
 ```
 
 A successful response contains `success: true` and `data.jobId`, plus file and storage metadata. Uploading creates the record but does not enqueue processing.

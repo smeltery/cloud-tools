@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { marked, Renderer } from 'marked';
 import { guides } from './catalog';
+import { renderCode } from './docs-code';
 export const headingId = (text: string) =>
   text
     .toLowerCase()
@@ -16,6 +17,7 @@ export async function readGuide(slug: string) {
     id: headingId(match[1]),
   }));
   const renderer = new Renderer();
+  renderer.code = renderCode;
   renderer.heading = ({ text, depth, tokens }) =>
     `<h${depth} id="${headingId(text)}">${renderer.parser.parseInline(tokens)}</h${depth}>`;
   renderer.link = ({ href, tokens }) => {

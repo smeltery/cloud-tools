@@ -216,12 +216,6 @@
 .docs-chat summary {
   cursor: pointer;
 }
-.docs-chat a {
-  display: block;
-  margin-left: 28px;
-  padding: 10px;
-  font-size: 12px;
-}
 .docs-pagination {
   display: flex;
   justify-content: space-between;
