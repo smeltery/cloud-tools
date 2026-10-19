@@ -5,7 +5,7 @@ export const tools = [
     href: '/tools/converters/image',
     icon: Image,
     description: 'Give your images a new format.',
-    formats: 'JPG · PNG · WebP · TIFF',
+    formats: 'JPG · PNG · WebP · GIF',
     category: 'Convert',
   },
   {
@@ -13,7 +13,7 @@ export const tools = [
     href: '/tools/converters/audio',
     icon: Music,
     description: 'The right format for every listening moment.',
-    formats: 'MP3 · WAV · FLAC · AAC',
+    formats: 'MP3 · WAV · OGG · FLAC',
     category: 'Convert',
   },
   {
@@ -21,7 +21,7 @@ export const tools = [
     href: '/tools/converters/video',
     icon: Video,
     description: 'Make your video fit its next destination.',
-    formats: 'MP4 · MOV · WebM · MKV',
+    formats: 'MP4 · MOV · AVI · WebM',
     category: 'Convert',
   },
   {
